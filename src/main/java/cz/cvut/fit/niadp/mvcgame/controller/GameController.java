@@ -23,6 +23,9 @@ public class GameController {
                 case DOWN_KEY:
                     model.moveCannonDown();
                     break;
+                case SHOOT_KEY:
+                    model.cannonShoot();
+                    break;
                 case EXIT_KEY:
                     System.exit(0);
                     break;
@@ -31,5 +34,6 @@ public class GameController {
             }
         }
         model.update();
+        pressedKeysCodes.clear();
     }
 }
