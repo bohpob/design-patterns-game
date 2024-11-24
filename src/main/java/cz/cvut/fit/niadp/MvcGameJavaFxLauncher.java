@@ -32,7 +32,7 @@ public class MvcGameJavaFxLauncher extends Application {
         stage.setScene(theScene);
         Canvas canvas = new Canvas(winWidth, winHeigth);
         root.getChildren().add(canvas);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         ArrayList<String> pressedKeysCodes = new ArrayList<>();
         theScene.setOnKeyPressed(
                 e -> {
@@ -49,13 +49,10 @@ public class MvcGameJavaFxLauncher extends Application {
                 }
         );
         // the game-loop
+        theMvcGame.setGraphicsContext(graphicsContext);
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                // Clear the canvas
-                gc.clearRect(0, 0, winWidth, winHeigth);
                 theMvcGame.processPressedKeys(pressedKeysCodes);
-                theMvcGame.update();
-                theMvcGame.render(gc);
             }
         }.start();
         stage.show();
