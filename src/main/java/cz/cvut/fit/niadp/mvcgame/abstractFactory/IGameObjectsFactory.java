@@ -7,7 +7,7 @@ public interface IGameObjectsFactory {
 
     AbsCannon createCannon();
 
-    AbsMissile createMissile();
+    AbsMissile createMissile(double initAngle, int initVelocity);
 
     // createEnemies() ...
 }

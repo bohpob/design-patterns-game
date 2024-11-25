@@ -7,4 +7,12 @@ public class MvcGameConfig {
     public static final int MOVE_STEP = 10;
     public static final int CANNON_POS_X = 50;
     public static final int CANNON_POS_Y = MAX_Y / 2;
+    public static final double INIT_ANGLE = 0;
+    public static final int INIT_POWER = 10;
+    public static final double ANGLE_STEP = Math.PI / 18;
+    public static final int POWER_STEP = 1;
+    public static final double GRAVITY = 9.81;
+    public static final int MAGIC_TIME_CONST = 100;
+    public static final int MIN_POWER = 1;
+    public static final int MAX_POWER = 50;
 }

@@ -1,13 +1,11 @@
 package cz.cvut.fit.niadp.mvcgame.view;
 
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.controller.GameController;
 import cz.cvut.fit.niadp.mvcgame.model.GameModel;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.visitor.GameDrawer;
 import javafx.scene.canvas.GraphicsContext;
-
-import static cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig.MAX_X;
-import static cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig.MAX_Y;
 
 public class GameView implements IObserver {
 
@@ -29,7 +27,7 @@ public class GameView implements IObserver {
 
     public void render() {
         if (graphicsContext != null) {
-            graphicsContext.clearRect(0, 0, MAX_X, MAX_Y);
+            graphicsContext.clearRect(0, 0, MvcGameConfig.MAX_X, MvcGameConfig.MAX_Y);
             model.getGameObjects().forEach(gameObject -> gameObject.acceptVisitor(gameDrawer));
         }
     }
