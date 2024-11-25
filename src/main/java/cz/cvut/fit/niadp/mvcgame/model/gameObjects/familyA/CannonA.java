@@ -17,7 +17,7 @@ public class CannonA extends AbsCannon {
     private final IGameObjectsFactory gameObjectsFactory;
     private double angle;
     private int power;
-    private List<AbsMissile> shootingBatch;
+    private final List<AbsMissile> shootingBatch;
 
     public CannonA(Position position, IGameObjectsFactory gameObjectsFactory) {
         this.position = position;
@@ -28,10 +28,12 @@ public class CannonA extends AbsCannon {
         shootingBatch = new ArrayList<>();
     }
 
+    @Override
     public void moveUp() {
         move(new Vector(0, -1 * MvcGameConfig.MOVE_STEP));
     }
 
+    @Override
     public void moveDown() {
         move(new Vector(0, MvcGameConfig.MOVE_STEP));
     }
@@ -78,5 +80,4 @@ public class CannonA extends AbsCannon {
 
         }
     }
-
 }

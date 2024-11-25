@@ -16,9 +16,11 @@ public class RandomMovingStrategy implements IMovingStrategy {
 
     @Override
     public void updatePosition(AbsMissile missile) {
-        missile.move(new Vector(
-                random.nextInt(-MvcGameConfig.MOVE_STEP, 2 * MvcGameConfig.MOVE_STEP),
-                random.nextInt(-MvcGameConfig.MOVE_STEP, MvcGameConfig.MOVE_STEP)
-        ));
+        missile.move(
+                new Vector(
+                        random.nextInt(-MvcGameConfig.MOVE_STEP, 2 * MvcGameConfig.MOVE_STEP),
+                        random.nextInt(-MvcGameConfig.MOVE_STEP, MvcGameConfig.MOVE_STEP)
+                )
+        );
     }
 }

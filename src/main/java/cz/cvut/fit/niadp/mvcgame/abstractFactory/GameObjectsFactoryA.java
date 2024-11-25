@@ -1,17 +1,17 @@
 package cz.cvut.fit.niadp.mvcgame.abstractFactory;
 
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
-import cz.cvut.fit.niadp.mvcgame.model.GameModel;
+import cz.cvut.fit.niadp.mvcgame.model.IGameModel;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.CannonA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.MissileA;
 
 public class GameObjectsFactoryA implements IGameObjectsFactory {
 
-    private final GameModel model;
+    private final IGameModel model;
 
-    public GameObjectsFactoryA(GameModel gameModel) {
-        this.model = gameModel;
+    public GameObjectsFactoryA(IGameModel model) {
+        this.model = model;
     }
 
     @Override

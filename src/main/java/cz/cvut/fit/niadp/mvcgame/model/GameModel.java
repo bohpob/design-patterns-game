@@ -2,24 +2,22 @@ package cz.cvut.fit.niadp.mvcgame.model;
 
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.GameObjectsFactoryA;
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
+import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsMissile;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameObject;
-import cz.cvut.fit.niadp.mvcgame.observer.IObservable;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
 import cz.cvut.fit.niadp.mvcgame.strategy.RandomMovingStrategy;
 import cz.cvut.fit.niadp.mvcgame.strategy.RealisticMovingStrategy;
 import cz.cvut.fit.niadp.mvcgame.strategy.SimpleMovingStrategy;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Stream;
 
-public class GameModel implements IObservable {
+public class GameModel implements IGameModel {
 
     private final AbsCannon cannon;
     private final List<AbsMissile> missiles;
@@ -27,16 +25,29 @@ public class GameModel implements IObservable {
     private final IGameObjectsFactory gameObjectsFactory;
     private IMovingStrategy movingStrategy;
 
+    private final Queue<AbstractGameCommand> unexecutedCommands;
+    private final Stack<AbstractGameCommand> executedCommands;
+
     public GameModel() {
         gameObjectsFactory = new GameObjectsFactoryA(this);
         cannon = gameObjectsFactory.createCannon();
         observers = new HashSet<>();
         missiles = new ArrayList<>();
         movingStrategy = new SimpleMovingStrategy();
+
+        unexecutedCommands = new LinkedBlockingQueue<>();
+        executedCommands = new Stack<>();
     }
 
     public void update() {
         moveMissiles();
+        executeCommands();
+    }
+
+    private void executeCommands() {
+        while (!unexecutedCommands.isEmpty()) {
+            executedCommands.push(unexecutedCommands.poll().doExecute());
+        }
     }
 
     private void moveMissiles() {
@@ -90,10 +101,6 @@ public class GameModel implements IObservable {
         notifyObservers();
     }
 
-    public List<AbsMissile> getMissiles() {
-        return missiles;
-    }
-
     public List<GameObject> getGameObjects() {
         return Stream.concat(Stream.of(cannon), missiles.stream()).toList();
     }
@@ -109,6 +116,8 @@ public class GameModel implements IObservable {
             movingStrategy = new RandomMovingStrategy();
         } else if (movingStrategy instanceof RandomMovingStrategy) {
             movingStrategy = new SimpleMovingStrategy();
+        } else {
+
         }
     }
 
@@ -129,5 +138,39 @@ public class GameModel implements IObservable {
     @Override
     public void notifyObservers() {
         observers.forEach(IObserver::update);
+    }
+
+    private static class Memento {
+
+        private int cannonPositionX;
+        private int cannonPositionY;
+        // game snapshot (gameobjects, score, strategy, cannon state)
+    }
+
+    public Object createMemento() {
+        Memento gameModelSnapshot = new Memento();
+        gameModelSnapshot.cannonPositionX = cannon.getPosition().getX();
+        gameModelSnapshot.cannonPositionY = cannon.getPosition().getY();
+        return gameModelSnapshot;
+    }
+
+    public void setMemento(Object memento) {
+        Memento gameModelSnapshot = (Memento) memento;
+        cannon.getPosition().setX(gameModelSnapshot.cannonPositionX);
+        cannon.getPosition().setY(gameModelSnapshot.cannonPositionY);
+
+    }
+
+    @Override
+    public void registerCommand(AbstractGameCommand command) {
+        unexecutedCommands.add(command);
+    }
+
+    @Override
+    public void undoLastCommand() {
+        if (!executedCommands.isEmpty()) {
+            executedCommands.pop().unExecute();
+            notifyObservers();
+        }
     }
 }
