@@ -5,6 +5,7 @@ import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsMissile;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameObject;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
@@ -15,11 +16,11 @@ import cz.cvut.fit.niadp.mvcgame.strategy.SimpleMovingStrategy;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.stream.Stream;
 
 public class GameModel implements IGameModel {
 
     private final AbsCannon cannon;
+    private List<AbsEnemy> enemies;
     private final List<AbsMissile> missiles;
     private final Set<IObserver> observers;
     private final IGameObjectsFactory gameObjectsFactory;
@@ -31,6 +32,7 @@ public class GameModel implements IGameModel {
     public GameModel() {
         gameObjectsFactory = new GameObjectsFactoryA(this);
         cannon = gameObjectsFactory.createCannon();
+        enemies = gameObjectsFactory.createEnemies();
         observers = new HashSet<>();
         missiles = new ArrayList<>();
         movingStrategy = new SimpleMovingStrategy();
@@ -102,7 +104,11 @@ public class GameModel implements IGameModel {
     }
 
     public List<GameObject> getGameObjects() {
-        return Stream.concat(Stream.of(cannon), missiles.stream()).toList();
+        List<GameObject> gameObjects = new ArrayList<>();
+        gameObjects.add(cannon);
+        gameObjects.addAll(enemies);
+        gameObjects.addAll(missiles);
+        return gameObjects;
     }
 
     public IMovingStrategy getMovingStrategy() {
@@ -144,6 +150,7 @@ public class GameModel implements IGameModel {
 
         private int cannonPositionX;
         private int cannonPositionY;
+        private List<AbsEnemy> enemies;
         // game snapshot (gameobjects, score, strategy, cannon state)
     }
 
@@ -151,6 +158,7 @@ public class GameModel implements IGameModel {
         Memento gameModelSnapshot = new Memento();
         gameModelSnapshot.cannonPositionX = cannon.getPosition().getX();
         gameModelSnapshot.cannonPositionY = cannon.getPosition().getY();
+        gameModelSnapshot.enemies = new ArrayList<>(enemies);
         return gameModelSnapshot;
     }
 
@@ -158,7 +166,7 @@ public class GameModel implements IGameModel {
         Memento gameModelSnapshot = (Memento) memento;
         cannon.getPosition().setX(gameModelSnapshot.cannonPositionX);
         cannon.getPosition().setY(gameModelSnapshot.cannonPositionY);
-
+        enemies = gameModelSnapshot.enemies;
     }
 
     @Override
