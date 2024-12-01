@@ -1,5 +1,6 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
@@ -27,5 +28,10 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject {
     @Override
     public void acceptVisitor(IVisitor visitor) {
         visitor.visitMissile(this);
+    }
+
+    public boolean checkHit(AbsEnemy enemy) {
+        double distance = position.distanceTo(enemy.position);
+        return distance <= MvcGameConfig.COLLISION_RADIUS;
     }
 }

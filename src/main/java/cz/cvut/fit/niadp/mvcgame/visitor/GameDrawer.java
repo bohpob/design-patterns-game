@@ -34,14 +34,24 @@ public class GameDrawer implements IVisitor {
 
     @Override
     public void visitEnemy(AbsEnemy enemy) {
-        if (enemy.getType() == AbsEnemy.Type.ENEMY_1)
+        if (enemy.getType() == AbsEnemy.EnemyType.ENEMY_1) {
             drawGameObject(enemy, MvcGameResources.ENEMY_1_RESOURCE);
-        else
+        } else {
             drawGameObject(enemy, MvcGameResources.ENEMY_2_RESOURCE);
+        }
     }
 
     @Override
     public void visitGameInfo(AbsGameInfo gameInfo) {
         drawText(gameInfo.getText(), gameInfo.getPosition());
+    }
+
+    @Override
+    public void visitCollision(AbsCollision collision) {
+        if (AbsCollision.CollisionType.COLLISION_1 == collision.getType()) {
+            drawGameObject(collision, MvcGameResources.COLLISION_RESOURCE);
+        } else {
+            drawGameObject(collision, MvcGameResources.COLLISION_WITH_BLOOD_RESOURCE);
+        }
     }
 }

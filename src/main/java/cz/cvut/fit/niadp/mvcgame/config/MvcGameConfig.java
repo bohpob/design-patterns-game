@@ -20,4 +20,6 @@ public class MvcGameConfig {
     public static final int MAX_X_ENEMY = 1800;
     public static final int MAX_Y_ENEMY = 750;
     public static final int NUM_OF_ENEMIES = 10;
+    public static final int COLLISION_RADIUS = 25;
+    public static final int COLLISION_LIFETIME = 500;
 }

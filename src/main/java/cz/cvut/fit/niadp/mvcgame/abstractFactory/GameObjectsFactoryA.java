@@ -6,8 +6,10 @@ import cz.cvut.fit.niadp.mvcgame.builder.Director;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.IGameModel;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCollision;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.CannonA;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.CollisionA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.GameInfoA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.MissileA;
 
@@ -55,16 +57,12 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
 
             Position position = new Position(x, y);
 
-            int health;
-
+            int health = 1;
             if (i % 2 == 0) {
                 director.setBuilder(new BuilderEnemy1());
-                health = 1;
             } else {
                 director.setBuilder(new BuilderEnemy2());
-                health = 2;
             }
-
             enemies.add(director.construct(position, health));
         }
         return enemies;
@@ -73,5 +71,10 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
     @Override
     public GameInfoA createGameInfo() {
         return new GameInfoA(new Position(MvcGameConfig.MAX_X - 250, 50), model);
+    }
+
+    @Override
+    public AbsCollision createCollision(AbsCollision.CollisionType type, Position position) {
+        return new CollisionA(position, type);
     }
 }

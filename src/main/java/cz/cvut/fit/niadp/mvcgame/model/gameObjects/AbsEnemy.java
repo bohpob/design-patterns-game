@@ -5,25 +5,33 @@ import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
 public abstract class AbsEnemy extends GameObject {
 
-    public enum Type {
+    public enum EnemyType {
         ENEMY_1,
         ENEMY_2
     }
 
-    protected Type type;
+    protected EnemyType enemyType;
     protected int health;
 
-    public AbsEnemy(Position position, Type type) {
+    public AbsEnemy(Position position, EnemyType enemyType) {
         this.position = position;
-        this.type = type;
+        this.enemyType = enemyType;
+    }
+
+    public void decreaseHealth() {
+        health--;
+    }
+
+    public boolean isDead() {
+        return health <= 0;
     }
 
     public void setHealth(int health) {
         this.health = health;
     }
 
-    public Type getType() {
-        return type;
+    public EnemyType getType() {
+        return enemyType;
     }
 
     public void setPosition(Position position) {

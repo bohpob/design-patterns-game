@@ -33,4 +33,10 @@ public class Position {
         setX(getX() + vector.getDX());
         setY(getY() + vector.getDY());
     }
+
+    public double distanceTo(Position other) {
+        int deltaX = other.getX() - this.dimX;
+        int deltaY = other.getY() - this.dimY;
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    }
 }

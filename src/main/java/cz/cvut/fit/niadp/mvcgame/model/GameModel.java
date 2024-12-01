@@ -19,6 +19,7 @@ public class GameModel implements IGameModel {
     private final AbsCannon cannon;
     private List<AbsEnemy> enemies;
     private AbsGameInfo gameInfo;
+    private List<AbsCollision> collisions;
     private final List<AbsMissile> missiles;
     private final Set<IObserver> observers;
     private final IGameObjectsFactory gameObjectsFactory;
@@ -34,6 +35,7 @@ public class GameModel implements IGameModel {
         gameInfo = gameObjectsFactory.createGameInfo();
         observers = new HashSet<>();
         missiles = new ArrayList<>();
+        collisions = new ArrayList<>();
         movingStrategy = new SimpleMovingStrategy();
 
         unexecutedCommands = new LinkedBlockingQueue<>();
@@ -55,7 +57,40 @@ public class GameModel implements IGameModel {
     private void moveMissiles() {
         missiles.forEach(AbsMissile::move);
         destroyMissiles();
+        destroyEnemies();
+        destroyCollisions();
         notifyObservers();
+    }
+
+    private void destroyCollisions() {
+        collisions.removeIf(AbsCollision::expireCollision);
+    }
+
+    private void destroyEnemies() {
+        List<AbsMissile> missilesToRemove = new ArrayList<>();
+        List<AbsEnemy> enemiesToRemove = enemies.stream()
+                .filter(enemy -> missiles.stream().anyMatch(missile -> {
+                    if (missile.checkHit(enemy)) {
+                        missilesToRemove.add(missile);
+                        enemy.decreaseHealth();
+                        createCollision(enemy);
+                        return enemy.isDead();
+                    }
+                    return false;
+                })).toList();
+
+        enemies.removeAll(enemiesToRemove);
+        missiles.removeAll(missilesToRemove);
+    }
+
+    private void createCollision(AbsEnemy enemy) {
+        if (enemy.isDead()) {
+            if (enemy.getType() == AbsEnemy.EnemyType.ENEMY_1) {
+                collisions.add(gameObjectsFactory.createCollision(AbsCollision.CollisionType.COLLISION_1, enemy.getPosition()));
+            } else {
+                collisions.add(gameObjectsFactory.createCollision(AbsCollision.CollisionType.COLLISION_2, enemy.getPosition()));
+            }
+        }
     }
 
     private void destroyMissiles() {
@@ -117,6 +152,7 @@ public class GameModel implements IGameModel {
         gameObjects.add(cannon);
         gameObjects.addAll(enemies);
         gameObjects.addAll(missiles);
+        gameObjects.addAll(collisions);
         gameObjects.add(gameInfo);
         return gameObjects;
     }
@@ -170,6 +206,7 @@ public class GameModel implements IGameModel {
         private int cannonPositionY;
         private List<AbsEnemy> enemies;
         private AbsGameInfo gameInfo;
+        private List<AbsCollision> collisions;
         // game snapshot (gameobjects, score, strategy, cannon state)
     }
 
@@ -179,6 +216,7 @@ public class GameModel implements IGameModel {
         gameModelSnapshot.cannonPositionX = cannon.getPosition().getX();
         gameModelSnapshot.cannonPositionY = cannon.getPosition().getY();
         gameModelSnapshot.enemies = new ArrayList<>(enemies);
+        gameModelSnapshot.collisions = new ArrayList<>(collisions);
         gameModelSnapshot.gameInfo = gameInfo;
         return gameModelSnapshot;
     }
@@ -190,6 +228,7 @@ public class GameModel implements IGameModel {
         cannon.getPosition().setY(gameModelSnapshot.cannonPositionY);
         enemies = gameModelSnapshot.enemies;
         gameInfo = gameModelSnapshot.gameInfo;
+        collisions = gameModelSnapshot.collisions;
     }
 
     @Override

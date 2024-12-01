@@ -6,6 +6,6 @@ import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
 public class Enemy2A extends AbsEnemy {
 
     public Enemy2A(Position position) {
-        super(position, Type.ENEMY_2);
+        super(position, EnemyType.ENEMY_2);
     }
 }

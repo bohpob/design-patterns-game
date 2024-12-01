@@ -1,9 +1,7 @@
 package cz.cvut.fit.niadp.mvcgame.abstractFactory;
 
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsGameInfo;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsMissile;
+import cz.cvut.fit.niadp.mvcgame.model.Position;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
 
 import java.util.List;
 
@@ -16,4 +14,6 @@ public interface IGameObjectsFactory {
     List<AbsEnemy> createEnemies();
 
     AbsGameInfo createGameInfo();
+
+    AbsCollision createCollision(AbsCollision.CollisionType type, Position position);
 }
