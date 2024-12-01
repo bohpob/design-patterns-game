@@ -4,10 +4,7 @@ import cz.cvut.fit.niadp.mvcgame.abstractFactory.GameObjectsFactoryA;
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsMissile;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameObject;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
 import cz.cvut.fit.niadp.mvcgame.strategy.RandomMovingStrategy;
@@ -21,6 +18,7 @@ public class GameModel implements IGameModel {
 
     private final AbsCannon cannon;
     private List<AbsEnemy> enemies;
+    private AbsGameInfo gameInfo;
     private final List<AbsMissile> missiles;
     private final Set<IObserver> observers;
     private final IGameObjectsFactory gameObjectsFactory;
@@ -33,6 +31,7 @@ public class GameModel implements IGameModel {
         gameObjectsFactory = new GameObjectsFactoryA(this);
         cannon = gameObjectsFactory.createCannon();
         enemies = gameObjectsFactory.createEnemies();
+        gameInfo = gameObjectsFactory.createGameInfo();
         observers = new HashSet<>();
         missiles = new ArrayList<>();
         movingStrategy = new SimpleMovingStrategy();
@@ -41,6 +40,7 @@ public class GameModel implements IGameModel {
         executedCommands = new Stack<>();
     }
 
+    @Override
     public void update() {
         moveMissiles();
         executeCommands();
@@ -64,57 +64,74 @@ public class GameModel implements IGameModel {
         );
     }
 
+    @Override
     public Position getCannonPosition() {
         return cannon.getPosition();
     }
 
+    @Override
     public void moveCannonUp() {
         cannon.moveUp();
         notifyObservers();
     }
 
+    @Override
     public void moveCannonDown() {
         cannon.moveDown();
         notifyObservers();
     }
 
+    @Override
     public void cannonShoot() {
         missiles.addAll(cannon.shoot());
         notifyObservers();
     }
 
+    @Override
     public void aimCannonUp() {
         cannon.aimUp();
         notifyObservers();
     }
 
+    @Override
     public void aimCannonDown() {
         cannon.aimDown();
         notifyObservers();
     }
 
+    @Override
     public void cannonPowerUp() {
         cannon.powerUp();
         notifyObservers();
     }
 
+    @Override
     public void cannonPowerDown() {
         cannon.powerDown();
         notifyObservers();
     }
 
+    @Override
     public List<GameObject> getGameObjects() {
         List<GameObject> gameObjects = new ArrayList<>();
         gameObjects.add(cannon);
         gameObjects.addAll(enemies);
         gameObjects.addAll(missiles);
+        gameObjects.add(gameInfo);
         return gameObjects;
     }
 
+    @Override
     public IMovingStrategy getMovingStrategy() {
         return movingStrategy;
     }
 
+    @Override
+    public AbsCannon getCannon() {
+        return cannon;
+    }
+
+    @Override
     public void toggleMovingStrategy() {
         if (movingStrategy instanceof SimpleMovingStrategy) {
             movingStrategy = new RealisticMovingStrategy();
@@ -127,6 +144,7 @@ public class GameModel implements IGameModel {
         }
     }
 
+    @Override
     public void toggleShootingMode() {
         cannon.toggleShootingMode();
     }
@@ -151,22 +169,27 @@ public class GameModel implements IGameModel {
         private int cannonPositionX;
         private int cannonPositionY;
         private List<AbsEnemy> enemies;
+        private AbsGameInfo gameInfo;
         // game snapshot (gameobjects, score, strategy, cannon state)
     }
 
+    @Override
     public Object createMemento() {
         Memento gameModelSnapshot = new Memento();
         gameModelSnapshot.cannonPositionX = cannon.getPosition().getX();
         gameModelSnapshot.cannonPositionY = cannon.getPosition().getY();
         gameModelSnapshot.enemies = new ArrayList<>(enemies);
+        gameModelSnapshot.gameInfo = gameInfo;
         return gameModelSnapshot;
     }
 
+    @Override
     public void setMemento(Object memento) {
         Memento gameModelSnapshot = (Memento) memento;
         cannon.getPosition().setX(gameModelSnapshot.cannonPositionX);
         cannon.getPosition().setY(gameModelSnapshot.cannonPositionY);
         enemies = gameModelSnapshot.enemies;
+        gameInfo = gameModelSnapshot.gameInfo;
     }
 
     @Override

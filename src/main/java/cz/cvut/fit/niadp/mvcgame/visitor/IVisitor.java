@@ -2,6 +2,7 @@ package cz.cvut.fit.niadp.mvcgame.visitor;
 
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsGameInfo;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsMissile;
 
 public interface IVisitor {
@@ -12,5 +13,7 @@ public interface IVisitor {
 
     void visitEnemy(AbsEnemy enemy);
 
-    // collisions, gameInfo, ...
+    void visitGameInfo(AbsGameInfo gameInfo);
+
+    // collisions, ...
 }

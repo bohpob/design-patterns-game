@@ -23,4 +23,9 @@ public class RandomMovingStrategy implements IMovingStrategy {
                 )
         );
     }
+
+    @Override
+    public String getName() {
+        return "Random moving";
+    }
 }

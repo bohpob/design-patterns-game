@@ -6,7 +6,7 @@ public class DoubleShootingMode implements IShootingMode {
 
     @Override
     public String getName() {
-        return getClass().getSimpleName();
+        return "Double shooting";
     }
 
     @Override

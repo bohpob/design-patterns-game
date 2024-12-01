@@ -13,4 +13,9 @@ public class SimpleMovingStrategy implements IMovingStrategy {
         int dY = (int) (missile.getInitVelocity() * time * Math.sin(missile.getInitAngle()));
         missile.move(new Vector(dX, dY));
     }
+
+    @Override
+    public String getName() {
+        return "Simple moving";
+    }
 }

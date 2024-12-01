@@ -7,6 +7,7 @@ import cz.cvut.fit.niadp.mvcgame.model.Vector;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsMissile;
 import cz.cvut.fit.niadp.mvcgame.state.DoubleShootingMode;
+import cz.cvut.fit.niadp.mvcgame.state.IShootingMode;
 import cz.cvut.fit.niadp.mvcgame.state.SingleShootingMode;
 
 import java.util.ArrayList;
@@ -79,5 +80,15 @@ public class CannonA extends AbsCannon {
         } else {
 
         }
+    }
+
+    @Override
+    public IShootingMode getShootingMode() {
+        return shootingMode;
+    }
+
+    @Override
+    public int getPower() {
+        return power;
     }
 }

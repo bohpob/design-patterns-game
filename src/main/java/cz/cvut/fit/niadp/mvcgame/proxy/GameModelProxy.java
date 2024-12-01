@@ -4,6 +4,7 @@ import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
 import cz.cvut.fit.niadp.mvcgame.model.GameModel;
 import cz.cvut.fit.niadp.mvcgame.model.IGameModel;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.GameObject;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
@@ -86,6 +87,11 @@ public class GameModelProxy implements IGameModel {
     @Override
     public IMovingStrategy getMovingStrategy() {
         return subject.getMovingStrategy();
+    }
+
+    @Override
+    public AbsCannon getCannon() {
+        return subject.getCannon();
     }
 
     @Override

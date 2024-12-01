@@ -6,6 +6,7 @@ import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.CannonA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.EnemyA;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.GameInfoA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.MissileA;
 
 import java.util.ArrayList;
@@ -52,5 +53,10 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
                     enemyType));
         }
         return enemies;
+    }
+
+    @Override
+    public GameInfoA createGameInfo() {
+        return new GameInfoA(new Position(MvcGameConfig.MAX_X - 250, 50), model);
     }
 }

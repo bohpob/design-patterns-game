@@ -31,6 +31,10 @@ public abstract class AbsCannon extends GameObject {
 
     public abstract void toggleShootingMode();
 
+    public abstract IShootingMode getShootingMode();
+
+    public abstract int getPower();
+
     @Override
     public void acceptVisitor(IVisitor visitor) {
         visitor.visitCannon(this);
