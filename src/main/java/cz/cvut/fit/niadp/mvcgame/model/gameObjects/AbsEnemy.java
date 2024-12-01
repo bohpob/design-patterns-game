@@ -11,16 +11,23 @@ public abstract class AbsEnemy extends GameObject {
     }
 
     protected Type type;
+    protected int health;
 
     public AbsEnemy(Position position, Type type) {
         this.position = position;
         this.type = type;
     }
 
-    public abstract int getHealth();
+    public void setHealth(int health) {
+        this.health = health;
+    }
 
     public Type getType() {
         return type;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     @Override

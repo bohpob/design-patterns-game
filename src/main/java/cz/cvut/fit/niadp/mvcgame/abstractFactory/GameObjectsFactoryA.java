@@ -1,11 +1,13 @@
 package cz.cvut.fit.niadp.mvcgame.abstractFactory;
 
+import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy1;
+import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy2;
+import cz.cvut.fit.niadp.mvcgame.builder.Director;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.IGameModel;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.CannonA;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.EnemyA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.GameInfoA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.MissileA;
 
@@ -16,9 +18,11 @@ import java.util.Random;
 public class GameObjectsFactoryA implements IGameObjectsFactory {
 
     private final IGameModel model;
+    private Director director;
 
     public GameObjectsFactoryA(IGameModel model) {
         this.model = model;
+        this.director = new Director(new BuilderEnemy1());
     }
 
     @Override
@@ -39,18 +43,29 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
     @Override
     public List<AbsEnemy> createEnemies() {
         List<AbsEnemy> enemies = new ArrayList<>();
+        director = new Director(new BuilderEnemy1());
 
         int spawnZoneWidth = (MvcGameConfig.MAX_X_ENEMY - MvcGameConfig.MIN_X_ENEMY) / MvcGameConfig.NUM_OF_ENEMIES;
 
         for (int i = 0; i < MvcGameConfig.NUM_OF_ENEMIES; i++) {
-            AbsEnemy.Type enemyType = (i % 2 == 0) ? AbsEnemy.Type.ENEMY_1 : AbsEnemy.Type.ENEMY_2;
+            int x = new Random().nextInt(
+                    MvcGameConfig.MIN_X_ENEMY + i * spawnZoneWidth,
+                    MvcGameConfig.MIN_X_ENEMY + (i + 1) * spawnZoneWidth);
+            int y = new Random().nextInt(MvcGameConfig.MIN_Y_ENEMY, MvcGameConfig.MAX_Y_ENEMY);
 
-            enemies.add(new EnemyA(new Position(
-                    new Random().nextInt(
-                            MvcGameConfig.MIN_X_ENEMY + i * spawnZoneWidth,
-                            MvcGameConfig.MIN_X_ENEMY + (i + 1) * spawnZoneWidth),
-                    new Random().nextInt(MvcGameConfig.MIN_Y_ENEMY, MvcGameConfig.MAX_Y_ENEMY)),
-                    enemyType));
+            Position position = new Position(x, y);
+
+            int health;
+
+            if (i % 2 == 0) {
+                director.setBuilder(new BuilderEnemy1());
+                health = 1;
+            } else {
+                director.setBuilder(new BuilderEnemy2());
+                health = 2;
+            }
+
+            enemies.add(director.construct(position, health));
         }
         return enemies;
     }
