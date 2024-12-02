@@ -53,7 +53,7 @@ public class GameController {
                     CareTaker.getInstance().restoreMemento();
                     break;
                 case MvcGameKeys.UNDO_LAST_COMMAND:
-                    model.undoLastCommand();
+                    model.registerCommand(new UndoLastCommand(model));
                     break;
                 case MvcGameKeys.EXIT_KEY:
                     System.exit(0);

@@ -34,4 +34,10 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject {
         double distance = position.distanceTo(enemy.position);
         return distance <= MvcGameConfig.COLLISION_RADIUS;
     }
+
+    public boolean isOutOfPlayArea() {
+        return position.getX() > MvcGameConfig.MAX_X ||
+                position.getY() > MvcGameConfig.MAX_Y ||
+                position.getX() < 0 || position.getY() < 0;
+    }
 }

@@ -3,7 +3,7 @@ package cz.cvut.fit.niadp.mvcgame.model;
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.GameObjectsFactoryA;
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
-import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
+import cz.cvut.fit.niadp.mvcgame.command.UndoLastCommand;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
@@ -50,7 +50,10 @@ public class GameModel implements IGameModel {
 
     private void executeCommands() {
         while (!unexecutedCommands.isEmpty()) {
-            executedCommands.push(unexecutedCommands.poll().doExecute());
+            AbstractGameCommand command = unexecutedCommands.poll().doExecute();
+            if (!(command instanceof UndoLastCommand)) {
+                executedCommands.push(command);
+            }
         }
     }
 
@@ -94,9 +97,7 @@ public class GameModel implements IGameModel {
     }
 
     private void destroyMissiles() {
-        missiles.removeAll(
-                missiles.stream().filter(missile -> missile.getPosition().getX() > MvcGameConfig.MAX_X).toList()
-        );
+        missiles.removeAll(missiles.stream().filter(AbsMissile::isOutOfPlayArea).toList());
     }
 
     @Override
