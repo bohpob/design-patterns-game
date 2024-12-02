@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.14'
     id 'name.remal.sonarlint' version '3.3.7'
+    id 'checkstyle'
 }
 
 repositories {
@@ -19,9 +20,23 @@ application {
     mainClassName = 'cz.cvut.fit.niadp.MvcGameJavaFxLauncher'
 }
 
+// https://google.github.io/styleguide/javaguide.html
+checkstyle {
+    toolVersion = '10.20.2'
+    configFile = file('src/main/resources/checkstyle/checkstyle.xml')
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(file("$buildDir/reports/checkstyle.html"))
+    }
+}
+
 javafx {
     version = "20"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    modules = ['javafx.controls', 'javafx.fxml']
 }
 
 java {
