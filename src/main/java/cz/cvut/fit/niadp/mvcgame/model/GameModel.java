@@ -4,12 +4,11 @@ import cz.cvut.fit.niadp.mvcgame.abstractFactory.GameObjectsFactoryA;
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
 import cz.cvut.fit.niadp.mvcgame.command.UndoLastCommand;
+import cz.cvut.fit.niadp.mvcgame.iterator.IMovingStrategyIterator;
+import cz.cvut.fit.niadp.mvcgame.iterator.MovingStrategyCollection;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
-import cz.cvut.fit.niadp.mvcgame.strategy.RandomMovingStrategy;
-import cz.cvut.fit.niadp.mvcgame.strategy.RealisticMovingStrategy;
-import cz.cvut.fit.niadp.mvcgame.strategy.SimpleMovingStrategy;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -23,7 +22,7 @@ public class GameModel implements IGameModel {
     private final List<AbsMissile> missiles;
     private final Set<IObserver> observers;
     private final IGameObjectsFactory gameObjectsFactory;
-    private IMovingStrategy movingStrategy;
+    private final IMovingStrategyIterator movingStrategyIterator;
 
     private final Queue<AbstractGameCommand> unexecutedCommands;
     private final Stack<AbstractGameCommand> executedCommands;
@@ -36,7 +35,7 @@ public class GameModel implements IGameModel {
         observers = new HashSet<>();
         missiles = new ArrayList<>();
         collisions = new ArrayList<>();
-        movingStrategy = new SimpleMovingStrategy();
+        movingStrategyIterator = new MovingStrategyCollection().createIterator();
 
         unexecutedCommands = new LinkedBlockingQueue<>();
         executedCommands = new Stack<>();
@@ -160,7 +159,7 @@ public class GameModel implements IGameModel {
 
     @Override
     public IMovingStrategy getMovingStrategy() {
-        return movingStrategy;
+        return movingStrategyIterator.getCurrent();
     }
 
     @Override
@@ -170,15 +169,7 @@ public class GameModel implements IGameModel {
 
     @Override
     public void toggleMovingStrategy() {
-        if (movingStrategy instanceof SimpleMovingStrategy) {
-            movingStrategy = new RealisticMovingStrategy();
-        } else if (movingStrategy instanceof RealisticMovingStrategy) {
-            movingStrategy = new RandomMovingStrategy();
-        } else if (movingStrategy instanceof RandomMovingStrategy) {
-            movingStrategy = new SimpleMovingStrategy();
-        } else {
-
-        }
+        movingStrategyIterator.next();
     }
 
     @Override
