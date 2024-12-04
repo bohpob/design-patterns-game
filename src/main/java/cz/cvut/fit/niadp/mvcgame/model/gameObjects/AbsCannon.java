@@ -1,17 +1,18 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
-import cz.cvut.fit.niadp.mvcgame.state.DoubleShootingMode;
+import cz.cvut.fit.niadp.mvcgame.iterator.shootingMode.IShootingModeIterator;
 import cz.cvut.fit.niadp.mvcgame.state.IShootingMode;
-import cz.cvut.fit.niadp.mvcgame.state.SingleShootingMode;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
 import java.util.List;
 
 public abstract class AbsCannon extends GameObject {
 
-    protected IShootingMode shootingMode;
-    protected static IShootingMode SINGLE_SHOOTING_MODE = new SingleShootingMode();
-    protected static IShootingMode DOUBLE_SHOOTING_MODE = new DoubleShootingMode();
+    protected final IShootingModeIterator shootingModeIterator;
+
+    public AbsCannon(IShootingModeIterator shootingModeIterator) {
+        this.shootingModeIterator = shootingModeIterator;
+    }
 
     public abstract void moveUp();
 
@@ -33,7 +34,15 @@ public abstract class AbsCannon extends GameObject {
 
     public abstract IShootingMode getShootingMode();
 
+    public abstract void setShootingMode(IShootingMode shootingMode);
+
     public abstract int getPower();
+
+    public abstract void setPower(int power);
+
+    public abstract double getAngle();
+
+    public abstract void setAngle(double angle);
 
     @Override
     public void acceptVisitor(IVisitor visitor) {

@@ -1,4 +1,4 @@
-package cz.cvut.fit.niadp.mvcgame.iterator;
+package cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy;
 
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
 import cz.cvut.fit.niadp.mvcgame.strategy.RandomMovingStrategy;

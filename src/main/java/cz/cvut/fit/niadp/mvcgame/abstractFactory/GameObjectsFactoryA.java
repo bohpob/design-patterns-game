@@ -1,5 +1,6 @@
 package cz.cvut.fit.niadp.mvcgame.abstractFactory;
 
+import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy;
 import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy1;
 import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy2;
 import cz.cvut.fit.niadp.mvcgame.builder.Director;
@@ -45,27 +46,33 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
     @Override
     public List<AbsEnemy> createEnemies() {
         List<AbsEnemy> enemies = new ArrayList<>();
+        Random random = new Random();
         director = new Director(new BuilderEnemy1());
 
         int spawnZoneWidth = (MvcGameConfig.MAX_X_ENEMY - MvcGameConfig.MIN_X_ENEMY) / MvcGameConfig.NUM_OF_ENEMIES;
 
         for (int i = 0; i < MvcGameConfig.NUM_OF_ENEMIES; i++) {
-            int x = new Random().nextInt(
-                    MvcGameConfig.MIN_X_ENEMY + i * spawnZoneWidth,
-                    MvcGameConfig.MIN_X_ENEMY + (i + 1) * spawnZoneWidth);
-            int y = new Random().nextInt(MvcGameConfig.MIN_Y_ENEMY, MvcGameConfig.MAX_Y_ENEMY);
+            Position position = generateRandomPosition(random, i, spawnZoneWidth);
 
-            Position position = new Position(x, y);
-
+            director.setBuilder(selectBuilder(i));
             int health = 1;
-            if (i % 2 == 0) {
-                director.setBuilder(new BuilderEnemy1());
-            } else {
-                director.setBuilder(new BuilderEnemy2());
-            }
+
             enemies.add(director.construct(position, health));
         }
         return enemies;
+    }
+
+    private Position generateRandomPosition(Random random, int index, int spawnZoneWidth) {
+        int x = random.nextInt(
+                MvcGameConfig.MIN_X_ENEMY + index * spawnZoneWidth,
+                MvcGameConfig.MIN_X_ENEMY + (index + 1) * spawnZoneWidth
+        );
+        int y = random.nextInt(MvcGameConfig.MIN_Y_ENEMY, MvcGameConfig.MAX_Y_ENEMY);
+        return new Position(x, y);
+    }
+
+    private BuilderEnemy selectBuilder(int index) {
+        return (index % 2 == 0) ? new BuilderEnemy1() : new BuilderEnemy2();
     }
 
     @Override

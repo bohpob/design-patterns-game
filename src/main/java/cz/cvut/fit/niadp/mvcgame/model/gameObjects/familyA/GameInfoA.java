@@ -15,8 +15,9 @@ public class GameInfoA extends AbsGameInfo {
 
     @Override
     public String getText() {
-        return "Strategy : " + model.getMovingStrategy().getName() + "\n" +
+        return "Score : " + model.getScore() + "\n" +
+                "Power : " + model.getCannon().getPower() + "\n" +
                 "Mode : " + model.getCannon().getShootingMode().getName() + "\n" +
-                "Power : " + model.getCannon().getPower() + "\n";
+                "Strategy : " + model.getMovingStrategy().getName() + "\n";
     }
 }

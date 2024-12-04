@@ -1,4 +1,4 @@
-package cz.cvut.fit.niadp.mvcgame.iterator;
+package cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy;
 
 public interface IMovingStrategyCollection {
 

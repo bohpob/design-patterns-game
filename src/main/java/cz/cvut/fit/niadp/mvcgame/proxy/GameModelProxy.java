@@ -95,6 +95,11 @@ public class GameModelProxy implements IGameModel {
     }
 
     @Override
+    public int getScore() {
+        return subject.getScore();
+    }
+
+    @Override
     public void toggleMovingStrategy() {
         subject.toggleMovingStrategy();
     }

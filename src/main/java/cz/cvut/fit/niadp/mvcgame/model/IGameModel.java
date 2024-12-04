@@ -34,6 +34,8 @@ public interface IGameModel extends IObservable {
 
     AbsCannon getCannon();
 
+    int getScore();
+
     void toggleMovingStrategy();
 
     void toggleShootingMode();

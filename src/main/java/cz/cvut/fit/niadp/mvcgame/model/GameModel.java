@@ -4,10 +4,12 @@ import cz.cvut.fit.niadp.mvcgame.abstractFactory.GameObjectsFactoryA;
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
 import cz.cvut.fit.niadp.mvcgame.command.UndoLastCommand;
-import cz.cvut.fit.niadp.mvcgame.iterator.IMovingStrategyIterator;
-import cz.cvut.fit.niadp.mvcgame.iterator.MovingStrategyCollection;
+import cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy.IMovingStrategyIterator;
+import cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy.MovingStrategyCollection;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.ScoreA;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
+import cz.cvut.fit.niadp.mvcgame.state.IShootingMode;
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
 
 import java.util.*;
@@ -15,19 +17,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameModel implements IGameModel {
 
+    private AbsScore score;
     private final AbsCannon cannon;
     private List<AbsEnemy> enemies;
-    private AbsGameInfo gameInfo;
+    private final AbsGameInfo gameInfo;
     private List<AbsCollision> collisions;
     private final List<AbsMissile> missiles;
     private final Set<IObserver> observers;
     private final IGameObjectsFactory gameObjectsFactory;
-    private final IMovingStrategyIterator movingStrategyIterator;
+    private IMovingStrategyIterator movingStrategyIterator;
 
     private final Queue<AbstractGameCommand> unexecutedCommands;
     private final Stack<AbstractGameCommand> executedCommands;
 
     public GameModel() {
+        score = new ScoreA(0);
         gameObjectsFactory = new GameObjectsFactoryA(this);
         cannon = gameObjectsFactory.createCannon();
         enemies = gameObjectsFactory.createEnemies();
@@ -168,6 +172,11 @@ public class GameModel implements IGameModel {
     }
 
     @Override
+    public int getScore() {
+        return score.getScore();
+    }
+
+    @Override
     public void toggleMovingStrategy() {
         movingStrategyIterator.next();
     }
@@ -196,10 +205,14 @@ public class GameModel implements IGameModel {
 
         private int cannonPositionX;
         private int cannonPositionY;
+        private double cannonAngle;
+        private int cannonPower;
+        private AbsScore score;
         private List<AbsEnemy> enemies;
-        private AbsGameInfo gameInfo;
         private List<AbsCollision> collisions;
-        // game snapshot (gameobjects, score, strategy, cannon state)
+        private IShootingMode shootingMode;
+        private IMovingStrategy movingStrategy;
+        // score
     }
 
     @Override
@@ -207,9 +220,13 @@ public class GameModel implements IGameModel {
         Memento gameModelSnapshot = new Memento();
         gameModelSnapshot.cannonPositionX = cannon.getPosition().getX();
         gameModelSnapshot.cannonPositionY = cannon.getPosition().getY();
+        gameModelSnapshot.cannonAngle = cannon.getAngle();
+        gameModelSnapshot.cannonPower = cannon.getPower();
         gameModelSnapshot.enemies = new ArrayList<>(enemies);
         gameModelSnapshot.collisions = new ArrayList<>(collisions);
-        gameModelSnapshot.gameInfo = gameInfo;
+        gameModelSnapshot.shootingMode = cannon.getShootingMode();
+        gameModelSnapshot.movingStrategy = movingStrategyIterator.getCurrent();
+        gameModelSnapshot.score = new ScoreA(score.getScore());
         return gameModelSnapshot;
     }
 
@@ -218,9 +235,13 @@ public class GameModel implements IGameModel {
         Memento gameModelSnapshot = (Memento) memento;
         cannon.getPosition().setX(gameModelSnapshot.cannonPositionX);
         cannon.getPosition().setY(gameModelSnapshot.cannonPositionY);
+        cannon.setAngle(gameModelSnapshot.cannonAngle);
+        cannon.setPower(gameModelSnapshot.cannonPower);
+        cannon.setShootingMode(gameModelSnapshot.shootingMode);
         enemies = gameModelSnapshot.enemies;
-        gameInfo = gameModelSnapshot.gameInfo;
         collisions = gameModelSnapshot.collisions;
+        score = gameModelSnapshot.score;
+        movingStrategyIterator.set(gameModelSnapshot.movingStrategy);
     }
 
     @Override

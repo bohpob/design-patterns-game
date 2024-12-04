@@ -2,13 +2,12 @@ package cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA;
 
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
+import cz.cvut.fit.niadp.mvcgame.iterator.shootingMode.ShootingModeCollection;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.model.Vector;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCannon;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsMissile;
-import cz.cvut.fit.niadp.mvcgame.state.DoubleShootingMode;
 import cz.cvut.fit.niadp.mvcgame.state.IShootingMode;
-import cz.cvut.fit.niadp.mvcgame.state.SingleShootingMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +20,11 @@ public class CannonA extends AbsCannon {
     private final List<AbsMissile> shootingBatch;
 
     public CannonA(Position position, IGameObjectsFactory gameObjectsFactory) {
+        super(new ShootingModeCollection().createIterator());
         this.position = position;
         this.gameObjectsFactory = gameObjectsFactory;
         angle = MvcGameConfig.INIT_ANGLE;
         power = MvcGameConfig.INIT_POWER;
-        shootingMode = SINGLE_SHOOTING_MODE;
         shootingBatch = new ArrayList<>();
     }
 
@@ -42,7 +41,7 @@ public class CannonA extends AbsCannon {
     @Override
     public List<AbsMissile> shoot() {
         shootingBatch.clear();
-        shootingMode.shoot(this);
+        shootingModeIterator.getCurrent().shoot(this);
         return shootingBatch;
     }
 
@@ -73,22 +72,36 @@ public class CannonA extends AbsCannon {
 
     @Override
     public void toggleShootingMode() {
-        if (shootingMode instanceof SingleShootingMode) {
-            shootingMode = DOUBLE_SHOOTING_MODE;
-        } else if (shootingMode instanceof DoubleShootingMode) {
-            shootingMode = SINGLE_SHOOTING_MODE;
-        } else {
-
-        }
+        shootingModeIterator.next();
     }
 
     @Override
     public IShootingMode getShootingMode() {
-        return shootingMode;
+        return shootingModeIterator.getCurrent();
+    }
+
+    @Override
+    public void setShootingMode(IShootingMode shootingMode) {
+        shootingModeIterator.set(shootingMode);
     }
 
     @Override
     public int getPower() {
         return power;
+    }
+
+    @Override
+    public void setPower(int power) {
+        this.power = power;
+    }
+
+    @Override
+    public double getAngle() {
+        return angle;
+    }
+
+    @Override
+    public void setAngle(double angle) {
+        this.angle = angle;
     }
 }
