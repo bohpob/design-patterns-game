@@ -34,6 +34,11 @@ tasks.withType(Checkstyle) {
     }
 }
 
+sonarLint {
+    sourceSets = ["src/main/java", "src/test/java"]
+    ignoreFailures = true
+}
+
 javafx {
     version = "20"
     modules = ['javafx.controls', 'javafx.fxml']
@@ -42,4 +47,8 @@ javafx {
 java {
     sourceCompatibility = JavaVersion.VERSION_19
     targetCompatibility = JavaVersion.VERSION_19
+}
+
+test {
+    jvmArgs "-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}"
 }
