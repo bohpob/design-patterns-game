@@ -25,7 +25,7 @@ public class GameModel implements IGameModel {
     private final List<AbsMissile> missiles;
     private final Set<IObserver> observers;
     private final IGameObjectsFactory gameObjectsFactory;
-    private IMovingStrategyIterator movingStrategyIterator;
+    private final IMovingStrategyIterator movingStrategyIterator;
 
     private final Queue<AbstractGameCommand> unexecutedCommands;
     private final Stack<AbstractGameCommand> executedCommands;
@@ -212,7 +212,6 @@ public class GameModel implements IGameModel {
         private List<AbsCollision> collisions;
         private IShootingMode shootingMode;
         private IMovingStrategy movingStrategy;
-        // score
     }
 
     @Override

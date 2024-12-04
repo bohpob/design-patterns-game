@@ -1,25 +1,24 @@
 package cz.cvut.fit.niadp.mvcgame.visitor;
 
+import cz.cvut.fit.niadp.mvcgame.bridge.IGameGraphics;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameResources;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 public class GameDrawer implements IVisitor {
 
-    private GraphicsContext graphicsContext;
+    private IGameGraphics gameGraphics;
 
-    public void setGraphicsContext(GraphicsContext graphicsContext) {
-        this.graphicsContext = graphicsContext;
+    public void setGraphicsContext(IGameGraphics gameGraphics) {
+        this.gameGraphics = gameGraphics;
     }
 
     private void drawGameObject(GameObject gameObject, String resource) {
-        graphicsContext.drawImage(new Image(resource), gameObject.getPosition().getX(), gameObject.getPosition().getY());
+        gameGraphics.drawImage(resource, gameObject.getPosition());
     }
 
     private void drawText(String text, Position position) {
-        graphicsContext.fillText(text, position.getX(), position.getY());
+        gameGraphics.drawText(text, position);
     }
 
     @Override

@@ -38,6 +38,6 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject {
     public boolean isOutOfPlayArea() {
         int x = position.getX();
         int y = position.getY();
-        return x < 0 || x > MvcGameConfig.MAX_X || y < 0 || y > MvcGameConfig.MAX_Y;
+        return x < MvcGameConfig.MIN_X || x > MvcGameConfig.MAX_X || y < MvcGameConfig.MIN_Y || y > MvcGameConfig.MAX_Y;
     }
 }
