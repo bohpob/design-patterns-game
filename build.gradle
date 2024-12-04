@@ -35,7 +35,7 @@ tasks.withType(Checkstyle) {
 }
 
 sonarLint {
-    sourceSets = ["src/main/java", "src/test/java"]
+    sourceSets = [project.sourceSets.main, project.sourceSets.test]
     ignoreFailures = true
 }
 

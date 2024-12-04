@@ -1,7 +1,5 @@
 stages:
   - build
-  - checkstyle
-  - sonarlint
 
 default:
   image: openjdk:19-jdk-slim
@@ -9,25 +7,10 @@ default:
 build:
   stage: build
   script:
-    - ./gradlew clean build -x sonarlintMain
+    - ./gradlew clean build
   artifacts:
     paths:
       - build/libs/*.jar
-
-checkstyle:
-  stage: checkstyle
-  script:
-    - ./gradlew checkstyleMain
-  artifacts:
-    paths:
       - build/reports/checkstyle.html
-    expire_in: 4 week
-
-sonarlint:
-  stage: sonarlint
-  script:
-    - ./gradlew sonarlintMain
-  artifacts:
-    paths:
       - build/reports/sonarlint/sonarlintMain/sonarlintMain.html
     expire_in: 4 week
