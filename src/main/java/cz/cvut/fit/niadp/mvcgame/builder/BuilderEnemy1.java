@@ -14,13 +14,20 @@ public class BuilderEnemy1 implements BuilderEnemy {
     }
 
     @Override
-    public void setHealth(int health) {
+    public void setHealth() {
+        int health = 1;
         enemy.setHealth(health);
     }
 
     @Override
     public void setPosition(Position position) {
         enemy.setPosition(position);
+    }
+
+    @Override
+    public void setScoreValue() {
+        int scoreValue = 10;
+        enemy.setScoreValue(scoreValue);
     }
 
     @Override

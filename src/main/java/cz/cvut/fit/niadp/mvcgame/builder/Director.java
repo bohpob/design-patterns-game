@@ -15,10 +15,11 @@ public class Director {
         this.builder = builder;
     }
 
-    public AbsEnemy construct(Position position, int health) {
+    public AbsEnemy construct(Position position) {
         builder.reset();
         builder.setPosition(position);
-        builder.setHealth(health);
+        builder.setHealth();
+        builder.setScoreValue();
         return builder.build();
     }
 }

@@ -7,9 +7,11 @@ public interface BuilderEnemy {
 
     void reset();
 
-    void setHealth(int health);
-
     void setPosition(Position position);
+
+    void setHealth();
+
+    void setScoreValue();
 
     AbsEnemy build();
 }
