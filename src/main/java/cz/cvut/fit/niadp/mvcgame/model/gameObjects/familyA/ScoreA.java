@@ -12,4 +12,9 @@ public class ScoreA extends AbsScore {
     public int getScore() {
         return score;
     }
+
+    @Override
+    public void addScore(int score) {
+        this.score += score;
+    }
 }

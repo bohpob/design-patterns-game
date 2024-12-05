@@ -80,6 +80,7 @@ public class GameModel implements IGameModel {
                         missilesToRemove.add(missile);
                         enemy.decreaseHealth();
                         createCollision(enemy);
+                        score.addScore(enemy.getScoreValue());
                         return enemy.isDead();
                     }
                     return false;
@@ -174,6 +175,11 @@ public class GameModel implements IGameModel {
     @Override
     public int getScore() {
         return score.getScore();
+    }
+
+    @Override
+    public List<AbsMissile> getMissiles() {
+        return missiles;
     }
 
     @Override

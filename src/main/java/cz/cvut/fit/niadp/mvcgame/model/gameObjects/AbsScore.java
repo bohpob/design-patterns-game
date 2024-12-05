@@ -5,4 +5,6 @@ public abstract class AbsScore {
     protected int score;
 
     public abstract int getScore();
+
+    public abstract void addScore(int score);
 }

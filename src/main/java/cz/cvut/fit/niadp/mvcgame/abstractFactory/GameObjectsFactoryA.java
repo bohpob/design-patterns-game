@@ -55,9 +55,7 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
             Position position = generateRandomPosition(random, i, spawnZoneWidth);
 
             director.setBuilder(selectBuilder(i));
-            int health = 1;
-
-            enemies.add(director.construct(position, health));
+            enemies.add(director.construct(position));
         }
         return enemies;
     }

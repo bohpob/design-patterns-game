@@ -11,6 +11,7 @@ public abstract class AbsEnemy extends GameObject {
     }
 
     protected EnemyType enemyType;
+    protected int scoreValue;
     protected int health;
 
     public AbsEnemy(Position position, EnemyType enemyType) {
@@ -34,8 +35,16 @@ public abstract class AbsEnemy extends GameObject {
         return enemyType;
     }
 
+    public int getScoreValue() {
+        return scoreValue;
+    }
+
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public void setScoreValue(int scoreValue) {
+        this.scoreValue = scoreValue;
     }
 
     @Override
