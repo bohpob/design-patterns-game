@@ -49,7 +49,7 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
         Random random = new Random();
         director = new Director(new BuilderEnemy1());
 
-        int spawnZoneWidth = (MvcGameConfig.MAX_X_ENEMY - MvcGameConfig.MIN_X_ENEMY) / MvcGameConfig.NUM_OF_ENEMIES;
+        int spawnZoneWidth = (MvcGameConfig.ENEMY_MAX_POS_X - MvcGameConfig.ENEMY_MIN_POS_X) / MvcGameConfig.NUM_OF_ENEMIES;
 
         for (int i = 0; i < MvcGameConfig.NUM_OF_ENEMIES; i++) {
             Position position = generateRandomPosition(random, i, spawnZoneWidth);
@@ -62,10 +62,10 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
 
     private Position generateRandomPosition(Random random, int index, int spawnZoneWidth) {
         int x = random.nextInt(
-                MvcGameConfig.MIN_X_ENEMY + index * spawnZoneWidth,
-                MvcGameConfig.MIN_X_ENEMY + (index + 1) * spawnZoneWidth
+                MvcGameConfig.ENEMY_MIN_POS_X + index * spawnZoneWidth,
+                MvcGameConfig.ENEMY_MIN_POS_X + (index + 1) * spawnZoneWidth
         );
-        int y = random.nextInt(MvcGameConfig.MIN_Y_ENEMY, MvcGameConfig.MAX_Y_ENEMY);
+        int y = random.nextInt(MvcGameConfig.ENEMY_MIN_POS_Y, MvcGameConfig.ENEMY_MAX_POS_Y);
         return new Position(x, y);
     }
 

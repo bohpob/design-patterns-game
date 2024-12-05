@@ -31,7 +31,7 @@ public class GameModel implements IGameModel {
     private final Stack<AbstractGameCommand> executedCommands;
 
     public GameModel() {
-        score = new ScoreA(0);
+        score = new ScoreA();
         gameObjectsFactory = new GameObjectsFactoryA(this);
         cannon = gameObjectsFactory.createCannon();
         enemies = gameObjectsFactory.createEnemies();

@@ -6,9 +6,9 @@ public class MvcGameKeys {
     public static final String DOWN_KEY = "DOWN";
     public static final String EXIT_KEY = "ESCAPE";
     public static final String SHOOT_KEY = "SPACE";
-    public static final String AIM_UP_KEY = "A";
-    public static final String AIM_DOWN_KEY = "Y";
-    public static final String POWER_UP_KEY = "F";
+    public static final String AIM_UP_KEY = "Q";
+    public static final String AIM_DOWN_KEY = "A";
+    public static final String POWER_UP_KEY = "E";
     public static final String POWER_DOWN_KEY = "D";
     public static final String TOGGLE_MOVING_STRATEGY_KEY = "M";
     public static final String TOGGLE_SHOOTING_MODE_KEY = "N";

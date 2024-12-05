@@ -1,7 +1,6 @@
 package cz.cvut.fit.niadp.mvcgame.controller;
 
 import cz.cvut.fit.niadp.mvcgame.command.*;
-import cz.cvut.fit.niadp.mvcgame.memento.CareTaker;
 import cz.cvut.fit.niadp.mvcgame.model.IGameModel;
 
 import java.util.List;
@@ -47,10 +46,10 @@ public class GameController {
                     model.registerCommand(new ToggleShootingModeCommand(model));
                     break;
                 case MvcGameKeys.STORE_GAME_SNAPSHOT_KEY:
-                    CareTaker.getInstance().createMemento();
+                    model.registerCommand(new StoreGameSnapshot(model));
                     break;
                 case MvcGameKeys.RESTORE_GAME_SNAPSHOT_KEY:
-                    CareTaker.getInstance().restoreMemento();
+                    model.registerCommand(new RestoreGameSnapshot(model));
                     break;
                 case MvcGameKeys.UNDO_LAST_COMMAND:
                     model.registerCommand(new UndoLastCommand(model));

@@ -4,6 +4,10 @@ import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsScore;
 
 public class ScoreA extends AbsScore {
 
+    public ScoreA() {
+        this.score = 0;
+    }
+
     public ScoreA(int score) {
         this.score = score;
     }
