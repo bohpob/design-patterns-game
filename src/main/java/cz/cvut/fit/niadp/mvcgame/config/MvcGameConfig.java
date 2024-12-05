@@ -2,6 +2,9 @@ package cz.cvut.fit.niadp.mvcgame.config;
 
 public class MvcGameConfig {
 
+    // Game name
+    public static final String GAME_NAME = "The NI-ADP MvcGame";
+
     // Play area
     public static final int MIN_X = 0;
     public static final int MIN_Y = 0;
@@ -34,5 +37,5 @@ public class MvcGameConfig {
 
     // Moving strategy
     public static final double GRAVITY = 9.81;
-    public static final int MAGIC_TIME_CONST = 100;
+    public static final int MAGIC_TIME_CONST = 200;
 }

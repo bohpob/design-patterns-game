@@ -3,12 +3,15 @@ package cz.cvut.fit.niadp;
 import cz.cvut.fit.niadp.mvcgame.bridge.GameGraphics;
 import cz.cvut.fit.niadp.mvcgame.bridge.IGameGraphics;
 import cz.cvut.fit.niadp.mvcgame.bridge.JavaFxGraphics;
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameResources;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -33,6 +36,10 @@ public class MvcGameJavaFxLauncher extends Application {
         Group root = new Group();
         Scene theScene = new Scene(root);
         stage.setScene(theScene);
+        ImageView backgroundView = new ImageView(new Image(MvcGameResources.BACKGROUND_1_RESOURCE));
+        backgroundView.setFitWidth(winWidth);
+        backgroundView.setFitHeight(winHeight);
+        root.getChildren().add(backgroundView);
         Canvas canvas = new Canvas(winWidth, winHeight);
         root.getChildren().add(canvas);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
@@ -65,5 +72,4 @@ public class MvcGameJavaFxLauncher extends Application {
     public static void main(String[] args) {
         launch();
     }
-
 }
