@@ -1,6 +1,7 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameResources;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
@@ -8,11 +9,13 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject {
 
     private final double initAngle;
     private final int initVelocity;
+    private final String resource;
 
     protected AbsMissile(Position initPosition, double initAngle, int initVelocity) {
         super(initPosition);
         this.initAngle = initAngle;
         this.initVelocity = initVelocity;
+        this.resource = MvcGameResources.MISSILE_RESOURCE;
     }
 
     public abstract void move();
@@ -23,6 +26,10 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject {
 
     public int getInitVelocity() {
         return initVelocity;
+    }
+
+    public String getResource() {
+        return resource;
     }
 
     @Override

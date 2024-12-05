@@ -73,21 +73,30 @@ public class GameModel implements IGameModel {
     }
 
     private void destroyEnemies() {
+        List<AbsEnemy> enemiesToRemove = new ArrayList<>();
         List<AbsMissile> missilesToRemove = new ArrayList<>();
-        List<AbsEnemy> enemiesToRemove = enemies.stream()
-                .filter(enemy -> missiles.stream().anyMatch(missile -> {
-                    if (missile.checkHit(enemy)) {
-                        missilesToRemove.add(missile);
-                        enemy.decreaseHealth();
-                        createCollision(enemy);
-                        score.addScore(enemy.getScoreValue());
-                        return enemy.isDead();
-                    }
-                    return false;
-                })).toList();
+
+        for (AbsEnemy enemy : enemies) {
+            for (AbsMissile missile : missiles) {
+                if (missile.checkHit(enemy)) {
+                    processHit(enemy, missile, enemiesToRemove, missilesToRemove);
+                    break;
+                }
+            }
+        }
 
         enemies.removeAll(enemiesToRemove);
         missiles.removeAll(missilesToRemove);
+    }
+
+    private void processHit(AbsEnemy enemy, AbsMissile missile, List<AbsEnemy> enemiesToRemove, List<AbsMissile> missilesToRemove) {
+        missilesToRemove.add(missile);
+        enemy.decreaseHealth();
+        createCollision(enemy);
+        score.addScore(enemy.getScoreValue());
+        if (enemy.isDead()) {
+            enemiesToRemove.add(enemy);
+        }
     }
 
     private void createCollision(AbsEnemy enemy) {
@@ -101,7 +110,7 @@ public class GameModel implements IGameModel {
     }
 
     private void destroyMissiles() {
-        missiles.removeAll(missiles.stream().filter(AbsMissile::isOutOfPlayArea).toList());
+        missiles.removeIf(AbsMissile::isOutOfPlayArea);
     }
 
     @Override

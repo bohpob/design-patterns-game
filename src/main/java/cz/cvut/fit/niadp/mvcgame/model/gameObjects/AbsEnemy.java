@@ -1,18 +1,29 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameResources;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
 public abstract class AbsEnemy extends GameObject {
 
     public enum EnemyType {
-        ENEMY_1,
-        ENEMY_2
+        ENEMY_1(MvcGameResources.ENEMY_1_RESOURCE),
+        ENEMY_2(MvcGameResources.ENEMY_2_RESOURCE);
+
+        private final String resource;
+
+        EnemyType(String resource) {
+            this.resource = resource;
+        }
+
+        public String getResource() {
+            return resource;
+        }
     }
 
-    protected EnemyType enemyType;
-    protected int scoreValue;
-    protected int health;
+    private final EnemyType enemyType;
+    private int scoreValue;
+    private int health;
 
     public AbsEnemy(Position position, EnemyType enemyType) {
         this.position = position;
@@ -45,6 +56,10 @@ public abstract class AbsEnemy extends GameObject {
 
     public void setScoreValue(int scoreValue) {
         this.scoreValue = scoreValue;
+    }
+
+    public String getResource() {
+        return enemyType.getResource();
     }
 
     @Override

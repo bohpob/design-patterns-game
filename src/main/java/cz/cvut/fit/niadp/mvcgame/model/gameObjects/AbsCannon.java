@@ -1,5 +1,6 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameResources;
 import cz.cvut.fit.niadp.mvcgame.iterator.shootingMode.IShootingModeIterator;
 import cz.cvut.fit.niadp.mvcgame.state.IShootingMode;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
@@ -9,9 +10,15 @@ import java.util.List;
 public abstract class AbsCannon extends GameObject {
 
     protected final IShootingModeIterator shootingModeIterator;
+    private final String resource;
 
     public AbsCannon(IShootingModeIterator shootingModeIterator) {
         this.shootingModeIterator = shootingModeIterator;
+        this.resource = MvcGameResources.CANNON_RESOURCE;
+    }
+
+    public String getResource() {
+        return resource;
     }
 
     public abstract void moveUp();
