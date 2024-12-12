@@ -15,5 +15,5 @@ public interface IGameObjectsFactory {
 
     AbsGameInfo createGameInfo();
 
-    AbsCollision createCollision(AbsCollision.CollisionType type, Position position);
+    AbsCollision createCollision(String resource, Position position);
 }

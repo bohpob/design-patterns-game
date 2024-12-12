@@ -101,11 +101,7 @@ public class GameModel implements IGameModel {
 
     private void createCollision(AbsEnemy enemy) {
         if (enemy.isDead()) {
-            if (enemy.getType() == AbsEnemy.EnemyType.ENEMY_1) {
-                collisions.add(gameObjectsFactory.createCollision(AbsCollision.CollisionType.COLLISION_1, enemy.getPosition()));
-            } else {
-                collisions.add(gameObjectsFactory.createCollision(AbsCollision.CollisionType.COLLISION_2, enemy.getPosition()));
-            }
+            collisions.add(gameObjectsFactory.createCollision(enemy.getDeathResource(), enemy.getPosition()));
         }
     }
 

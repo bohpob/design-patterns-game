@@ -5,7 +5,15 @@ import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCollision;
 
 public class CollisionA extends AbsCollision {
 
-    public CollisionA(Position initPosition, CollisionType collisionType) {
-        super(initPosition, collisionType);
+    private final String resource;
+
+    public CollisionA(Position initPosition, String resource) {
+        super(initPosition);
+        this.resource = resource;
+    }
+
+    @Override
+    public String getResource() {
+        return resource;
     }
 }

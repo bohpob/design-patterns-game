@@ -79,7 +79,7 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
     }
 
     @Override
-    public AbsCollision createCollision(AbsCollision.CollisionType type, Position position) {
-        return new CollisionA(position, type);
+    public AbsCollision createCollision(String resource, Position position) {
+        return new CollisionA(position, resource);
     }
 }

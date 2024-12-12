@@ -3,7 +3,9 @@ package cz.cvut.fit.niadp.mvcgame.config;
 public class MvcGameResources {
 
     public static final String CANNON_RESOURCE = "images/cannon.png";
-    public static final String MISSILE_RESOURCE = "images/missile.png";
+    public static final String MISSILE_RESOURCE_1 = "images/missile_1.png";
+    public static final String MISSILE_RESOURCE_2 = "images/missile_2.png";
+    public static final String MISSILE_RESOURCE_3 = "images/missile_3.png";
     public static final String BACKGROUND_1_RESOURCE = "images/back_1.jpg";
     public static final String BOUND_RESOURCE = "images/bound.png";
     public static final String ENEMY_1_RESOURCE = "images/enemy1.png";

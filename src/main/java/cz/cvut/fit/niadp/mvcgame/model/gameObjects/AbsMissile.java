@@ -1,21 +1,18 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
-import cz.cvut.fit.niadp.mvcgame.config.MvcGameResources;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
-public abstract class AbsMissile extends LifetimeLimitedGameObject {
+public abstract class AbsMissile extends LifetimeLimitedGameObject implements IObjectResource {
 
     private final double initAngle;
     private final int initVelocity;
-    private final String resource;
 
     protected AbsMissile(Position initPosition, double initAngle, int initVelocity) {
         super(initPosition);
         this.initAngle = initAngle;
         this.initVelocity = initVelocity;
-        this.resource = MvcGameResources.MISSILE_RESOURCE;
     }
 
     public abstract void move();
@@ -26,10 +23,6 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject {
 
     public int getInitVelocity() {
         return initVelocity;
-    }
-
-    public String getResource() {
-        return resource;
     }
 
     @Override
@@ -45,6 +38,6 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject {
     public boolean isOutOfPlayArea() {
         int x = position.getX();
         int y = position.getY();
-        return x < MvcGameConfig.MIN_X || x > MvcGameConfig.MAX_X || y < MvcGameConfig.MIN_Y || y > MvcGameConfig.MAX_Y;
+        return x > MvcGameConfig.MAX_X || x < MvcGameConfig.MIN_X || y < MvcGameConfig.MIN_Y || y > MvcGameConfig.MAX_Y;
     }
 }

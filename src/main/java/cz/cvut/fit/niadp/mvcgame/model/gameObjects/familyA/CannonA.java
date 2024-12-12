@@ -2,6 +2,7 @@ package cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA;
 
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameResources;
 import cz.cvut.fit.niadp.mvcgame.iterator.shootingMode.ShootingModeCollection;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.model.Vector;
@@ -107,5 +108,10 @@ public class CannonA extends AbsCannon {
     @Override
     public void setAngle(double angle) {
         this.angle = angle;
+    }
+
+    @Override
+    public String getResource() {
+        return MvcGameResources.CANNON_RESOURCE;
     }
 }
