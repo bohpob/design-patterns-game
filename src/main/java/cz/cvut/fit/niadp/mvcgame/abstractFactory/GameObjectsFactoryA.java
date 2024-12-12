@@ -1,18 +1,14 @@
 package cz.cvut.fit.niadp.mvcgame.abstractFactory;
 
-import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy;
-import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy1;
-import cz.cvut.fit.niadp.mvcgame.builder.BuilderEnemy2;
-import cz.cvut.fit.niadp.mvcgame.builder.Director;
+import cz.cvut.fit.niadp.mvcgame.builder.*;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.IGameModel;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCollision;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.CannonA;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.CollisionA;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.GameInfoA;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.MissileA;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsLevel;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsScore;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +17,7 @@ import java.util.Random;
 public class GameObjectsFactoryA implements IGameObjectsFactory {
 
     private final IGameModel model;
-    private Director director;
+    private final Director director;
 
     public GameObjectsFactoryA(IGameModel model) {
         this.model = model;
@@ -44,20 +40,25 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
     }
 
     @Override
-    public List<AbsEnemy> createEnemies() {
+    public List<AbsEnemy> createEnemies(int level) {
         List<AbsEnemy> enemies = new ArrayList<>();
         Random random = new Random();
-        director = new Director(new BuilderEnemy1());
 
-        int spawnZoneWidth = (MvcGameConfig.ENEMY_MAX_POS_X - MvcGameConfig.ENEMY_MIN_POS_X) / MvcGameConfig.NUM_OF_ENEMIES;
+        int spawnZoneWidth = (MvcGameConfig.ENEMY_MAX_POS_X - MvcGameConfig.ENEMY_MIN_POS_X) / (MvcGameConfig.START_NUM_OF_ENEMIES + level);
 
-        for (int i = 0; i < MvcGameConfig.NUM_OF_ENEMIES; i++) {
+        for (int i = 0; i < MvcGameConfig.START_NUM_OF_ENEMIES + level; i++) {
             Position position = generateRandomPosition(random, i, spawnZoneWidth);
 
             director.setBuilder(selectBuilder(i));
             enemies.add(director.construct(position));
         }
         return enemies;
+    }
+
+    @Override
+    public AbsEnemy createEnemyBoss() {
+        director.setBuilder(new BuilderEnemyBoss());
+        return director.construct(new Position(MvcGameConfig.ENEMY_BOSS_X, MvcGameConfig.ENEMY_BOSS_Y));
     }
 
     private Position generateRandomPosition(Random random, int index, int spawnZoneWidth) {
@@ -81,5 +82,15 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
     @Override
     public AbsCollision createCollision(String resource, Position position) {
         return new CollisionA(position, resource);
+    }
+
+    @Override
+    public AbsLevel createLevel() {
+        return new LevelA("LEVEL", 0, new Position(MvcGameConfig.LEVEL_X, MvcGameConfig.LEVEL_Y));
+    }
+
+    @Override
+    public AbsScore createScore() {
+        return new ScoreA();
     }
 }

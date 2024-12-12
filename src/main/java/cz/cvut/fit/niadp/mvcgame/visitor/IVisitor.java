@@ -13,4 +13,6 @@ public interface IVisitor {
     void visitGameInfo(AbsGameInfo gameInfo);
 
     void visitCollision(AbsCollision collision);
+
+    void visitLevel(AbsLevel level);
 }

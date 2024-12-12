@@ -11,9 +11,15 @@ public interface IGameObjectsFactory {
 
     AbsMissile createMissile(double initAngle, int initVelocity);
 
-    List<AbsEnemy> createEnemies();
+    List<AbsEnemy> createEnemies(int level);
+
+    AbsEnemy createEnemyBoss();
 
     AbsGameInfo createGameInfo();
 
     AbsCollision createCollision(String resource, Position position);
+
+    AbsLevel createLevel();
+
+    AbsScore createScore();
 }

@@ -7,6 +7,7 @@ import cz.cvut.fit.niadp.mvcgame.command.UndoLastCommand;
 import cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy.IMovingStrategyIterator;
 import cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy.MovingStrategyCollection;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.LevelA;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.ScoreA;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.state.IShootingMode;
@@ -17,11 +18,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameModel implements IGameModel {
 
+    private AbsLevel level;
     private AbsScore score;
     private final AbsCannon cannon;
     private List<AbsEnemy> enemies;
     private final AbsGameInfo gameInfo;
-    private List<AbsCollision> collisions;
+    private final List<AbsCollision> collisions;
     private final List<AbsMissile> missiles;
     private final Set<IObserver> observers;
     private final IGameObjectsFactory gameObjectsFactory;
@@ -31,10 +33,11 @@ public class GameModel implements IGameModel {
     private final Stack<AbstractGameCommand> executedCommands;
 
     public GameModel() {
-        score = new ScoreA();
         gameObjectsFactory = new GameObjectsFactoryA(this);
+        score = gameObjectsFactory.createScore();
+        level = gameObjectsFactory.createLevel();
         cannon = gameObjectsFactory.createCannon();
-        enemies = gameObjectsFactory.createEnemies();
+        enemies = gameObjectsFactory.createEnemies(level.getLevel());
         gameInfo = gameObjectsFactory.createGameInfo();
         observers = new HashSet<>();
         missiles = new ArrayList<>();
@@ -49,6 +52,23 @@ public class GameModel implements IGameModel {
     public void update() {
         moveMissiles();
         executeCommands();
+        levelCheck();
+    }
+
+    private void levelCheck() {
+        if (enemies.isEmpty() && collisions.isEmpty()) {
+            missiles.clear();
+            collisions.clear();
+            if (level.getLevel() < 1) {
+                level.newLevel();
+                enemies = gameObjectsFactory.createEnemies(level.getLevel());
+            } else if (level.getLevel() == 1) {
+                level.finalBoss();
+                enemies.add(gameObjectsFactory.createEnemyBoss());
+            } else {
+                level.theEnd();
+            }
+        }
     }
 
     private void executeCommands() {
@@ -92,17 +112,15 @@ public class GameModel implements IGameModel {
     private void processHit(AbsEnemy enemy, AbsMissile missile, List<AbsEnemy> enemiesToRemove, List<AbsMissile> missilesToRemove) {
         missilesToRemove.add(missile);
         enemy.decreaseHealth();
-        createCollision(enemy);
-        score.addScore(enemy.getScoreValue());
         if (enemy.isDead()) {
+            createCollision(enemy);
+            score.addScore(enemy.getScoreValue());
             enemiesToRemove.add(enemy);
         }
     }
 
     private void createCollision(AbsEnemy enemy) {
-        if (enemy.isDead()) {
-            collisions.add(gameObjectsFactory.createCollision(enemy.getDeathResource(), enemy.getPosition()));
-        }
+        collisions.add(gameObjectsFactory.createCollision(enemy.getDeathResource(), enemy.getPosition()));
     }
 
     private void destroyMissiles() {
@@ -164,6 +182,7 @@ public class GameModel implements IGameModel {
         gameObjects.addAll(missiles);
         gameObjects.addAll(collisions);
         gameObjects.add(gameInfo);
+        gameObjects.add(level);
         return gameObjects;
     }
 
@@ -180,6 +199,11 @@ public class GameModel implements IGameModel {
     @Override
     public int getScore() {
         return score.getScore();
+    }
+
+    @Override
+    public int getEnemyCount() {
+        return enemies.size();
     }
 
     @Override
@@ -219,8 +243,8 @@ public class GameModel implements IGameModel {
         private double cannonAngle;
         private int cannonPower;
         private AbsScore score;
+        private AbsLevel level;
         private List<AbsEnemy> enemies;
-        private List<AbsCollision> collisions;
         private IShootingMode shootingMode;
         private IMovingStrategy movingStrategy;
     }
@@ -233,10 +257,10 @@ public class GameModel implements IGameModel {
         gameModelSnapshot.cannonAngle = cannon.getAngle();
         gameModelSnapshot.cannonPower = cannon.getPower();
         gameModelSnapshot.enemies = new ArrayList<>(enemies);
-        gameModelSnapshot.collisions = new ArrayList<>(collisions);
         gameModelSnapshot.shootingMode = cannon.getShootingMode();
         gameModelSnapshot.movingStrategy = movingStrategyIterator.getCurrent();
         gameModelSnapshot.score = new ScoreA(score.getScore());
+        gameModelSnapshot.level = new LevelA(level.getText(), level.getLevel(), level.getPosition());
         return gameModelSnapshot;
     }
 
@@ -249,8 +273,8 @@ public class GameModel implements IGameModel {
         cannon.setPower(gameModelSnapshot.cannonPower);
         cannon.setShootingMode(gameModelSnapshot.shootingMode);
         enemies = gameModelSnapshot.enemies;
-        collisions = gameModelSnapshot.collisions;
         score = gameModelSnapshot.score;
+        level = gameModelSnapshot.level;
         movingStrategyIterator.set(gameModelSnapshot.movingStrategy);
     }
 

@@ -37,6 +37,8 @@ public interface IGameModel extends IObservable {
 
     int getScore();
 
+    int getEnemyCount();
+
     List<AbsMissile> getMissiles();
 
     void toggleMovingStrategy();

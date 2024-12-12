@@ -101,6 +101,11 @@ public class GameModelProxy implements IGameModel {
     }
 
     @Override
+    public int getEnemyCount() {
+        return subject.getEnemyCount();
+    }
+
+    @Override
     public List<AbsMissile> getMissiles() {
         return subject.getMissiles();
     }

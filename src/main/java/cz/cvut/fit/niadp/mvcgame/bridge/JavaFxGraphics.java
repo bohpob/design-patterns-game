@@ -4,6 +4,7 @@ import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 
 
 public class JavaFxGraphics implements IGameGraphicsImplementor {
@@ -12,6 +13,7 @@ public class JavaFxGraphics implements IGameGraphicsImplementor {
 
     public JavaFxGraphics(GraphicsContext graphicsContext) {
         this.graphicsContext = graphicsContext;
+        graphicsContext.setFont(new Font("Arial", 18));
     }
 
     @Override

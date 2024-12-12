@@ -11,6 +11,10 @@ public class MvcGameConfig {
     public static final int MAX_X = 1920;
     public static final int MAX_Y = 1080;
 
+    // Level
+    public static final int LEVEL_X = (int) (MAX_X * 0.485);
+    public static final int LEVEL_Y = 50;
+
     // Cannon and missiles
     public static final int CANNON_MIN_POS_Y = MIN_Y;
     public static final int CANNON_MAX_POS_Y = MAX_Y - 200;
@@ -25,11 +29,14 @@ public class MvcGameConfig {
     public static final int MAX_POWER = 50;
 
     // Enemy
+    public static final int ENEMY_BOSS_X = 900;
+    public static final int ENEMY_BOSS_Y = 500;
     public static final int ENEMY_MIN_POS_X = 300;
     public static final int ENEMY_MIN_POS_Y = 200;
     public static final int ENEMY_MAX_POS_X = 1800;
     public static final int ENEMY_MAX_POS_Y = 750;
-    public static final int NUM_OF_ENEMIES = 10;
+    // Base number of enemies, increases by the level (level 1 -> 8 enemies, level 2 -> 9 enemies, etc.)
+    public static final int START_NUM_OF_ENEMIES = 7;
 
     // Collision
     public static final int COLLISION_RADIUS = 25;

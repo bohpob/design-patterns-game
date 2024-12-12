@@ -37,11 +37,19 @@ public class GameDrawer implements IVisitor {
 
     @Override
     public void visitGameInfo(AbsGameInfo gameInfo) {
+        Position leftTop = new Position(gameInfo.getPosition().getX() - 25, gameInfo.getPosition().getY() - 25);
+        Position rightBottom = new Position(gameInfo.getPosition().getX() + 235, gameInfo.getPosition().getY() + 135);
+        gameGraphics.drawRectangle(leftTop, rightBottom);
         drawText(gameInfo.getText(), gameInfo.getPosition());
     }
 
     @Override
     public void visitCollision(AbsCollision collision) {
         drawGameObject(collision, collision.getResource());
+    }
+
+    @Override
+    public void visitLevel(AbsLevel level) {
+        drawText(level.getDisplayText(), level.getPosition());
     }
 }
