@@ -86,7 +86,7 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
 
     @Override
     public AbsLevel createLevel() {
-        return new LevelA("LEVEL", 0, new Position(MvcGameConfig.LEVEL_X, MvcGameConfig.LEVEL_Y));
+        return new LevelA();
     }
 
     @Override

@@ -1,19 +1,28 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
+import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
+import cz.cvut.fit.niadp.mvcgame.prototype.Prototype;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
-public abstract class AbsLevel extends GameObject {
+public abstract class AbsLevel extends GameObject implements Prototype {
 
-    private int level;
-    private final String text;
-    private String displayText;
+    protected int level;
+    protected final String text;
+    protected String displayText;
 
-    public AbsLevel(String text, int level, Position position) {
-        this.position = position;
-        this.level = level;
-        this.text = text;
-        newLevel();
+    public AbsLevel() {
+        this.level = 0;
+        this.text = "LEVEL";
+        this.displayText = this.text;
+        this.position = new Position(MvcGameConfig.LEVEL_X, MvcGameConfig.LEVEL_Y);
+    }
+
+    public AbsLevel(AbsLevel level) {
+        this.level = level.getLevel();
+        this.text = level.getText();
+        this.displayText = level.getDisplayText();
+        this.position = level.getPosition();
     }
 
     public void newLevel() {
@@ -46,4 +55,7 @@ public abstract class AbsLevel extends GameObject {
     public void acceptVisitor(IVisitor visitor) {
         visitor.visitLevel(this);
     }
+
+    @Override
+    public abstract AbsLevel clone();
 }

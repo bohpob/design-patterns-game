@@ -10,6 +10,10 @@ public class EnemyBossA extends AbsEnemy {
         super(position);
     }
 
+    public EnemyBossA(EnemyBossA enemy) {
+        super(enemy);
+    }
+
     @Override
     public String getDeathResource() {
         return MvcGameResources.COLLISION_ENEMY_BOSS_RESOURCE;
@@ -18,5 +22,10 @@ public class EnemyBossA extends AbsEnemy {
     @Override
     public String getResource() {
         return MvcGameResources.ENEMY_BOSS_RESOURCE;
+    }
+
+    @Override
+    public AbsEnemy clone() {
+        return new EnemyBossA(this);
     }
 }

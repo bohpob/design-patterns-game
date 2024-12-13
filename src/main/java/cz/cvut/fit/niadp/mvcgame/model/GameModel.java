@@ -7,14 +7,13 @@ import cz.cvut.fit.niadp.mvcgame.command.UndoLastCommand;
 import cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy.IMovingStrategyIterator;
 import cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy.MovingStrategyCollection;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.LevelA;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.ScoreA;
 import cz.cvut.fit.niadp.mvcgame.observer.IObserver;
 import cz.cvut.fit.niadp.mvcgame.state.IShootingMode;
 import cz.cvut.fit.niadp.mvcgame.strategy.IMovingStrategy;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 public class GameModel implements IGameModel {
 
@@ -36,6 +35,7 @@ public class GameModel implements IGameModel {
         gameObjectsFactory = new GameObjectsFactoryA(this);
         score = gameObjectsFactory.createScore();
         level = gameObjectsFactory.createLevel();
+        level.newLevel();
         cannon = gameObjectsFactory.createCannon();
         enemies = gameObjectsFactory.createEnemies(level.getLevel());
         gameInfo = gameObjectsFactory.createGameInfo();
@@ -59,10 +59,10 @@ public class GameModel implements IGameModel {
         if (enemies.isEmpty() && collisions.isEmpty()) {
             missiles.clear();
             collisions.clear();
-            if (level.getLevel() < 1) {
+            if (level.getLevel() < 3) {
                 level.newLevel();
                 enemies = gameObjectsFactory.createEnemies(level.getLevel());
-            } else if (level.getLevel() == 1) {
+            } else if (level.getLevel() == 3) {
                 level.finalBoss();
                 enemies.add(gameObjectsFactory.createEnemyBoss());
             } else {
@@ -256,11 +256,11 @@ public class GameModel implements IGameModel {
         gameModelSnapshot.cannonPositionY = cannon.getPosition().getY();
         gameModelSnapshot.cannonAngle = cannon.getAngle();
         gameModelSnapshot.cannonPower = cannon.getPower();
-        gameModelSnapshot.enemies = new ArrayList<>(enemies);
+        gameModelSnapshot.enemies = enemies.stream().map(AbsEnemy::clone).collect(Collectors.toList());
         gameModelSnapshot.shootingMode = cannon.getShootingMode();
         gameModelSnapshot.movingStrategy = movingStrategyIterator.getCurrent();
-        gameModelSnapshot.score = new ScoreA(score.getScore());
-        gameModelSnapshot.level = new LevelA(level.getText(), level.getLevel(), level.getPosition());
+        gameModelSnapshot.score = score.clone();
+        gameModelSnapshot.level = level.clone();
         return gameModelSnapshot;
     }
 

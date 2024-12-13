@@ -1,15 +1,22 @@
 package cz.cvut.fit.niadp.mvcgame.model.gameObjects;
 
 import cz.cvut.fit.niadp.mvcgame.model.Position;
+import cz.cvut.fit.niadp.mvcgame.prototype.Prototype;
 import cz.cvut.fit.niadp.mvcgame.visitor.IVisitor;
 
-public abstract class AbsEnemy extends GameObject implements IObjectResource {
+public abstract class AbsEnemy extends GameObject implements IObjectResource, Prototype {
 
-    private int scoreValue;
-    private int health;
+    protected int scoreValue;
+    protected int health;
 
     public AbsEnemy(Position position) {
         this.position = position;
+    }
+
+    public AbsEnemy(AbsEnemy enemy) {
+        this(enemy.getPosition());
+        this.scoreValue = enemy.getScoreValue();
+        this.health = enemy.getHealth();
     }
 
     public void decreaseHealth() {
@@ -22,6 +29,10 @@ public abstract class AbsEnemy extends GameObject implements IObjectResource {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    private int getHealth() {
+        return health;
     }
 
     public int getScoreValue() {
@@ -42,4 +53,7 @@ public abstract class AbsEnemy extends GameObject implements IObjectResource {
     public void acceptVisitor(IVisitor visitor) {
         visitor.visitEnemy(this);
     }
+
+    @Override
+    public abstract AbsEnemy clone();
 }

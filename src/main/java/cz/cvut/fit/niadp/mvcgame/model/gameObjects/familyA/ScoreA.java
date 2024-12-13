@@ -5,11 +5,11 @@ import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsScore;
 public class ScoreA extends AbsScore {
 
     public ScoreA() {
-        this.score = 0;
+        super();
     }
 
-    public ScoreA(int score) {
-        this.score = score;
+    public ScoreA(ScoreA score) {
+        super(score);
     }
 
     @Override
@@ -20,5 +20,10 @@ public class ScoreA extends AbsScore {
     @Override
     public void addScore(int score) {
         this.score += score;
+    }
+
+    @Override
+    public AbsScore clone() {
+        return new ScoreA(this);
     }
 }
