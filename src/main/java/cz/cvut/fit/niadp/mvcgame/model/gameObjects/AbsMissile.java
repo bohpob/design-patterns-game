@@ -30,7 +30,7 @@ public abstract class AbsMissile extends LifetimeLimitedGameObject implements IO
         visitor.visitMissile(this);
     }
 
-    public boolean checkHit(AbsEnemy enemy) {
+    public boolean checkHit(GameObject enemy) {
         double distance = position.distanceTo(enemy.position);
         return distance <= MvcGameConfig.COLLISION_RADIUS;
     }

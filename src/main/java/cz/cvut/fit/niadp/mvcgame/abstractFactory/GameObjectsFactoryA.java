@@ -4,10 +4,7 @@ import cz.cvut.fit.niadp.mvcgame.builder.*;
 import cz.cvut.fit.niadp.mvcgame.config.MvcGameConfig;
 import cz.cvut.fit.niadp.mvcgame.model.IGameModel;
 import cz.cvut.fit.niadp.mvcgame.model.Position;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsCollision;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsEnemy;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsLevel;
-import cz.cvut.fit.niadp.mvcgame.model.gameObjects.AbsScore;
+import cz.cvut.fit.niadp.mvcgame.model.gameObjects.*;
 import cz.cvut.fit.niadp.mvcgame.model.gameObjects.familyA.*;
 
 import java.util.ArrayList;
@@ -76,7 +73,7 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
 
     @Override
     public GameInfoA createGameInfo() {
-        return new GameInfoA(new Position(MvcGameConfig.MAX_X - 250, 50), model);
+        return new GameInfoA(new Position(MvcGameConfig.GAME_INFO_X, MvcGameConfig.GAME_INFO_Y), model);
     }
 
     @Override
@@ -92,5 +89,16 @@ public class GameObjectsFactoryA implements IGameObjectsFactory {
     @Override
     public AbsScore createScore() {
         return new ScoreA();
+    }
+
+    @Override
+    public List<AbsWall> createWalls() {
+        List<AbsWall> walls = new ArrayList<>();
+        for (int i = 0; i < MvcGameConfig.MAX_Y / 30; i++) {
+            Position position = new Position(MvcGameConfig.WALL_X, i * 30);
+            int scoreValue = -20;
+            walls.add(new WallA(position, scoreValue));
+        }
+        return walls;
     }
 }

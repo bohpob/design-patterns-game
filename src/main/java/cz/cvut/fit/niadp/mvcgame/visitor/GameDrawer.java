@@ -52,4 +52,9 @@ public class GameDrawer implements IVisitor {
     public void visitLevel(AbsLevel level) {
         drawText(level.getDisplayText(), level.getPosition());
     }
+
+    @Override
+    public void visitWall(AbsWall wall) {
+        drawGameObject(wall, wall.getResource());
+    }
 }

@@ -15,7 +15,7 @@ public class BuilderEnemy2 implements BuilderEnemy {
 
     @Override
     public void setHealth() {
-        int health = 1;
+        int health = 2;
         enemy.setHealth(health);
     }
 
@@ -26,7 +26,7 @@ public class BuilderEnemy2 implements BuilderEnemy {
 
     @Override
     public void setScoreValue() {
-        int scoreValue = 20;
+        int scoreValue = 200;
         enemy.setScoreValue(scoreValue);
     }
 

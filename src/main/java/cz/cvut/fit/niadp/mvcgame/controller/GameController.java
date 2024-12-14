@@ -54,6 +54,9 @@ public class GameController {
                 case MvcGameKeys.UNDO_LAST_COMMAND:
                     model.registerCommand(new UndoLastCommand(model));
                     break;
+                case MvcGameKeys.TOGGLE_WALL_COMMAND:
+                    model.registerCommand(new ToggleWallCommand(model));
+                    break;
                 case MvcGameKeys.EXIT_KEY:
                     System.exit(0);
                     break;

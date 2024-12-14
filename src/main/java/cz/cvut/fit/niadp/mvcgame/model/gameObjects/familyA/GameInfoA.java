@@ -18,7 +18,7 @@ public class GameInfoA extends AbsGameInfo {
         return "Score : " + model.getScore() + "\n" +
                 "Power : " + model.getCannon().getPower() + "\n" +
                 "Enemy count : " + model.getEnemyCount() + "\n" +
-                "Angle : " + model.getCannon().getAngle() + "\n" +
+                "Angle : " + String.format("%.6f", model.getCannon().getAngle()) + "\n" +
                 "Mode : " + model.getCannon().getShootingMode().getName() + "\n" +
                 "Strategy : " + model.getMovingStrategy().getName() + "\n";
     }

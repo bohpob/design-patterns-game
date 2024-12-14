@@ -22,4 +22,6 @@ public interface IGameObjectsFactory {
     AbsLevel createLevel();
 
     AbsScore createScore();
+
+    List<AbsWall> createWalls();
 }

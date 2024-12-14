@@ -26,7 +26,7 @@ public class BuilderEnemy1 implements BuilderEnemy {
 
     @Override
     public void setScoreValue() {
-        int scoreValue = 10;
+        int scoreValue = 50;
         enemy.setScoreValue(scoreValue);
     }
 

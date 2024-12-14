@@ -15,4 +15,5 @@ public class MvcGameKeys {
     public static final String STORE_GAME_SNAPSHOT_KEY = "S";
     public static final String RESTORE_GAME_SNAPSHOT_KEY = "R";
     public static final String UNDO_LAST_COMMAND = "Z";
+    public static final String TOGGLE_WALL_COMMAND = "W";
 }

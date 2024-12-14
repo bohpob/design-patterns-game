@@ -45,4 +45,11 @@ public class MvcGameConfig {
     // Moving strategy
     public static final double GRAVITY = 9.81;
     public static final int MAGIC_TIME_CONST = 200;
+
+    // Game info
+    public static final int GAME_INFO_X = MvcGameConfig.MAX_X - 320;
+    public static final int GAME_INFO_Y = 50;
+
+    // Wall
+    public static final int WALL_X = MAX_X - 30;
 }

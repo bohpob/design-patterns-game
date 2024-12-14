@@ -15,4 +15,6 @@ public interface IVisitor {
     void visitCollision(AbsCollision collision);
 
     void visitLevel(AbsLevel level);
+
+    void visitWall(AbsWall wall);
 }

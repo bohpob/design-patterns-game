@@ -58,11 +58,22 @@ public class CannonA extends AbsCannon {
     @Override
     public void aimUp() {
         angle -= MvcGameConfig.ANGLE_STEP;
+        angle = normalizeAngle(angle);
     }
 
     @Override
     public void aimDown() {
         angle += MvcGameConfig.ANGLE_STEP;
+        angle = normalizeAngle(angle);
+    }
+
+    private double normalizeAngle(double angle) {
+        if (angle < -Math.PI) {
+            angle += 2 * Math.PI;
+        } else if (angle > Math.PI) {
+            angle -= 2 * Math.PI;
+        }
+        return angle;
     }
 
     @Override

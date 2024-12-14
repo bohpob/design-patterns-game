@@ -45,6 +45,8 @@ public interface IGameModel extends IObservable {
 
     void toggleShootingMode();
 
+    void toggleWalls();
+
     Object createMemento();
 
     void setMemento(Object memento);

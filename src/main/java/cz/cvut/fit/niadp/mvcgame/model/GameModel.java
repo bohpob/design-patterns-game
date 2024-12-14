@@ -21,6 +21,7 @@ public class GameModel implements IGameModel {
     private AbsScore score;
     private final AbsCannon cannon;
     private List<AbsEnemy> enemies;
+    private List<AbsWall> walls;
     private final AbsGameInfo gameInfo;
     private final List<AbsCollision> collisions;
     private final List<AbsMissile> missiles;
@@ -42,6 +43,7 @@ public class GameModel implements IGameModel {
         observers = new HashSet<>();
         missiles = new ArrayList<>();
         collisions = new ArrayList<>();
+        walls = new ArrayList<>();
         movingStrategyIterator = new MovingStrategyCollection().createIterator();
 
         unexecutedCommands = new LinkedBlockingQueue<>();
@@ -84,12 +86,37 @@ public class GameModel implements IGameModel {
         missiles.forEach(AbsMissile::move);
         destroyMissiles();
         destroyEnemies();
+        destroyWalls();
         destroyCollisions();
         notifyObservers();
     }
 
     private void destroyCollisions() {
         collisions.removeIf(AbsCollision::expireCollision);
+    }
+
+    private void destroyWalls() {
+        List<AbsMissile> missilesToRemove = new ArrayList<>();
+
+        for (AbsWall wall : walls) {
+            for (AbsMissile missile : missiles) {
+                if (missile.checkHit(wall)) {
+                    missilesToRemove.add(missile);
+                    score.addScore(wall.getScoreValue());
+                    break;
+                }
+            }
+        }
+
+        missiles.removeAll(missilesToRemove);
+    }
+
+    public void toggleWalls() {
+        if (walls.isEmpty()) {
+            walls = gameObjectsFactory.createWalls();
+        } else {
+            walls.clear();
+        }
     }
 
     private void destroyEnemies() {
@@ -181,6 +208,7 @@ public class GameModel implements IGameModel {
         gameObjects.addAll(enemies);
         gameObjects.addAll(missiles);
         gameObjects.addAll(collisions);
+        gameObjects.addAll(walls);
         gameObjects.add(gameInfo);
         gameObjects.add(level);
         return gameObjects;
@@ -245,6 +273,7 @@ public class GameModel implements IGameModel {
         private AbsScore score;
         private AbsLevel level;
         private List<AbsEnemy> enemies;
+        private List<AbsWall> walls;
         private IShootingMode shootingMode;
         private IMovingStrategy movingStrategy;
     }
@@ -261,6 +290,7 @@ public class GameModel implements IGameModel {
         gameModelSnapshot.movingStrategy = movingStrategyIterator.getCurrent();
         gameModelSnapshot.score = score.clone();
         gameModelSnapshot.level = level.clone();
+        gameModelSnapshot.walls = walls.stream().map(AbsWall::clone).collect(Collectors.toList());
         return gameModelSnapshot;
     }
 
@@ -273,6 +303,7 @@ public class GameModel implements IGameModel {
         cannon.setPower(gameModelSnapshot.cannonPower);
         cannon.setShootingMode(gameModelSnapshot.shootingMode);
         enemies = gameModelSnapshot.enemies;
+        walls = gameModelSnapshot.walls;
         score = gameModelSnapshot.score;
         level = gameModelSnapshot.level;
         movingStrategyIterator.set(gameModelSnapshot.movingStrategy);

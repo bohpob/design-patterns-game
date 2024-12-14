@@ -121,6 +121,11 @@ public class GameModelProxy implements IGameModel {
     }
 
     @Override
+    public void toggleWalls() {
+        subject.toggleWalls();
+    }
+
+    @Override
     public Object createMemento() {
         return subject.createMemento();
     }
