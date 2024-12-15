@@ -1,0 +1,16 @@
+stages:
+  - build
+
+default:
+  image: openjdk:19-jdk-slim
+
+build:
+  stage: build
+  script:
+    - ./gradlew clean build
+  artifacts:
+    paths:
+      - build/libs/*.jar
+      - build/reports/checkstyle.html
+      - build/reports/sonarlint/sonarlintMain/sonarlintMain.html
+    expire_in: 4 week

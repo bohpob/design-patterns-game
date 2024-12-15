@@ -3,6 +3,7 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.14'
     id 'name.remal.sonarlint' version '3.3.7'
+    id 'checkstyle'
 }
 
 repositories {
@@ -11,7 +12,9 @@ repositories {
 
 dependencies {
     implementation 'junit:junit:4.13.2'
-    implementation 'org.openjfx:javafx-controls:20'
+    implementation 'org.openjfx:javafx-controls:21.0.5'
+    implementation 'org.openjfx:javafx-fxml:21.0.5'
+    implementation 'org.openjfx:javafx-media:21.0.5'
     testImplementation 'org.jmockit:jmockit:1.49'
 }
 
@@ -19,12 +22,35 @@ application {
     mainClassName = 'cz.cvut.fit.niadp.MvcGameJavaFxLauncher'
 }
 
+// https://google.github.io/styleguide/javaguide.html
+checkstyle {
+    toolVersion = '10.20.2'
+    configFile = file('src/main/resources/checkstyle/checkstyle.xml')
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(file("$buildDir/reports/checkstyle.html"))
+    }
+}
+
+sonarLint {
+    sourceSets = [project.sourceSets.main, project.sourceSets.test]
+    ignoreFailures = true
+}
+
 javafx {
-    version = "20"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
+    version = "21.0.5"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.media']
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_19
     targetCompatibility = JavaVersion.VERSION_19
+}
+
+test {
+    jvmArgs "-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}"
 }
