@@ -2,6 +2,8 @@ package cz.cvut.fit.niadp.mvcgame.model;
 
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.GameObjectsFactoryA;
 import cz.cvut.fit.niadp.mvcgame.abstractFactory.IGameObjectsFactory;
+import cz.cvut.fit.niadp.mvcgame.chain.SoundEvent;
+import cz.cvut.fit.niadp.mvcgame.chain.SoundSystem;
 import cz.cvut.fit.niadp.mvcgame.command.AbstractGameCommand;
 import cz.cvut.fit.niadp.mvcgame.command.UndoLastCommand;
 import cz.cvut.fit.niadp.mvcgame.iterator.movingStrategy.IMovingStrategyIterator;
@@ -32,6 +34,8 @@ public class GameModel implements IGameModel {
     private final Queue<AbstractGameCommand> unexecutedCommands;
     private final Stack<AbstractGameCommand> executedCommands;
 
+    private final SoundSystem soundSystem;
+
     public GameModel() {
         gameObjectsFactory = new GameObjectsFactoryA(this);
         score = gameObjectsFactory.createScore();
@@ -48,6 +52,8 @@ public class GameModel implements IGameModel {
 
         unexecutedCommands = new LinkedBlockingQueue<>();
         executedCommands = new Stack<>();
+
+        soundSystem = new SoundSystem();
     }
 
     @Override
@@ -102,6 +108,7 @@ public class GameModel implements IGameModel {
             for (AbsMissile missile : missiles) {
                 if (missile.checkHit(wall)) {
                     missilesToRemove.add(missile);
+                    soundSystem.process(new SoundEvent(SoundEvent.SoundType.WALL_HIT));
                     score.addScore(wall.getScoreValue());
                     break;
                 }
@@ -127,6 +134,7 @@ public class GameModel implements IGameModel {
             for (AbsMissile missile : missiles) {
                 if (missile.checkHit(enemy)) {
                     processHit(enemy, missile, enemiesToRemove, missilesToRemove);
+                    soundSystem.process(new SoundEvent(SoundEvent.SoundType.ENEMY_HIT));
                     break;
                 }
             }

@@ -27,7 +27,7 @@ public class ShootingModeIterator implements IShootingModeIterator {
     @Override
     public void set(IShootingMode shootingMode) {
         for (int i = 0; i < modes.size(); i++) {
-            if (getCurrent().equals(shootingMode)) {
+            if (getCurrent().getName().equals(shootingMode.getName())) {
                 return;
             } else {
                 next();

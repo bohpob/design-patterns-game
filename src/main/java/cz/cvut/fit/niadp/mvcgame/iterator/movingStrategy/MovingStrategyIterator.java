@@ -27,7 +27,7 @@ public class MovingStrategyIterator implements IMovingStrategyIterator {
     @Override
     public void set(IMovingStrategy strategy) {
         for (int i = 0; i < strategies.size(); i++) {
-            if (getCurrent().equals(strategy)) {
+            if (getCurrent().getName().equals(strategy.getName())) {
                 return;
             } else {
                 next();
