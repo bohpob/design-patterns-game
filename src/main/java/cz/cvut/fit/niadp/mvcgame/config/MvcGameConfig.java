@@ -3,7 +3,7 @@ package cz.cvut.fit.niadp.mvcgame.config;
 public class MvcGameConfig {
 
     // Game name
-    public static final String GAME_NAME = "The NI-ADP MvcGame";
+    public static final String GAME_NAME = "GAME";
 
     // Play area
     public static final int MIN_X = 0;

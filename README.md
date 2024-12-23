@@ -1,22 +1,45 @@
+# Design patterns
+
+The goal of this project was to practice and implement various design patterns through the development of a simple game.
+
+## Build and run
+
 Build: `./gradlew build`
+
 Run: `./gradlew run`
 
-Další návrhové vzory:
+Checkstyle: `./gradlew checkstyleMain` `./gradlew checkstyleTest`
 
-- Prototype
-- Iterator
-- Builder
-- Adapter
-- Chain of responsibility
+SonarLint: `./gradlew sonarlintMain` `./gradlew sonarlintTest`
 
-Další funkcionality hry:
+## Architecture
 
-- Úrovně
-- Hru lze ztížit stiskem klávesy 'W'. Na konci herního pole se objeví zeď. Při zásahu do zdi se odečítají body.
-- Přidány 2 zvuky: zvuk zásahu do nepřátel a do zdi.
-- V závislosti na pohybové strategii mají rakety různé barvy.
-- Ve hře jsou 3 různé typy nepřátel. Mají různou úroveň zdraví a počet bodů, které jsou uděleny za jejich zničení.
+This project follows the **MVC (Model-View-Controller)** architecture.
 
-Nepovinná úloha:
+## Design Patterns
 
-17. Použití nástroje pro kontrolu chyb a stylu kódu. (Použil jsem Checkstyle)
+This project implements the following design patterns:
+
+### Behavioral Patterns
+
+- **Chain of Responsibility**
+- **Command**
+- **Iterator**
+- **Memento**
+- **Observer**
+- **State**
+- **Strategy**
+- **Visitor**
+
+### Creational Patterns
+
+- **Abstract Factory**
+- **Builder**
+- **Prototype**
+- **Singleton**
+
+### Structural Patterns
+
+- **Adapter**
+- **Bridge**
+- **Proxy**
